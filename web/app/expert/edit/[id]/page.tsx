@@ -21,6 +21,7 @@ import type {
   Lang,
 } from "@/lib/types";
 import { AudienceBadge, CategoryArt, ExperienceStatusChip } from "@/components/ui";
+import LocationPicker from "@/components/LocationPicker";
 
 const CATEGORIES: CategoryId[] = [
   "pottery",
@@ -144,13 +145,6 @@ export default function EditExperience() {
           multiline
           onChange={(l, v) => setBi("description", l, v)}
         />
-        <BiField
-          label={t("districtField", lang)}
-          value={exp.district}
-          lang={lang}
-          onChange={(l, v) => setBi("district", l, v)}
-        />
-
         <div>
           <span className="label">{t("category", lang)}</span>
           <div className="flex flex-wrap gap-1.5">
@@ -175,6 +169,16 @@ export default function EditExperience() {
             </p>
           )}
         </div>
+      </Section>
+
+      <Section title={t("locationSection", lang)}>
+        <LocationPicker
+          value={{ lat: exp.lat, lon: exp.lon, district: exp.district }}
+          onChange={(v) =>
+            set({ lat: v.lat, lon: v.lon, district: v.district })
+          }
+          lang={lang}
+        />
       </Section>
 
       {/* Pricing and scheduling */}

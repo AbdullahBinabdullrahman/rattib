@@ -15,6 +15,7 @@ import { CATEGORY_RULES, checkHost } from "@/lib/eligibility";
 import { DEMO_EXPERT_ID } from "@/lib/seed";
 import type { AudiencePolicy, CategoryId, Experience } from "@/lib/types";
 import { AudienceBadge, CategoryArt } from "@/components/ui";
+import LocationPicker, { type LocationValue } from "@/components/LocationPicker";
 import { money } from "@/lib/format";
 
 const CATEGORIES: CategoryId[] = [
@@ -47,7 +48,11 @@ export default function NewExperience() {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [category, setCategory] = useState<CategoryId>("pottery");
-  const [district, setDistrict] = useState("");
+  const [location, setLocation] = useState<LocationValue>({
+    lat: 24.734,
+    lon: 46.5735,
+    district: { ar: "الدرعية", en: "Diriyah" },
+  });
   const [price, setPrice] = useState(250);
   const [duration, setDuration] = useState(120);
   const [seats, setSeats] = useState(8);
@@ -67,12 +72,9 @@ export default function NewExperience() {
       tagline: { ar: "", en: "" },
       description: { ar: desc, en: desc },
       category,
-      district: {
-        ar: district || "الدرعية",
-        en: district || "Diriyah",
-      },
-      lat: 24.734,
-      lon: 46.578,
+      district: location.district,
+      lat: location.lat,
+      lon: location.lon,
       durationMin: duration,
       seatsMin: 2,
       seatsMax: seats,
@@ -180,12 +182,11 @@ export default function NewExperience() {
               </div>
             </div>
             <div>
-              <span className="label">{t("districtField", lang)}</span>
-              <input
-                className="field"
-                value={district}
-                onChange={(e) => setDistrict(e.target.value)}
-                placeholder={lang === "ar" ? "الدرعية" : "Diriyah"}
+              <span className="label">{t("locationSection", lang)}</span>
+              <LocationPicker
+                value={location}
+                onChange={setLocation}
+                lang={lang}
               />
             </div>
           </div>
@@ -273,6 +274,12 @@ export default function NewExperience() {
                   {pick(CATEGORY_LABEL[category], lang)} ·{" "}
                   {money(price, lang)} · {duration} {t("minutes", lang)} ·{" "}
                   {seats} {t("seats", lang)}
+                </p>
+                <p className="text-xs text-muted mt-1">
+                  {pick(location.district, lang)} ·{" "}
+                  <span className="tnum" dir="ltr">
+                    {location.lat.toFixed(4)}, {location.lon.toFixed(4)}
+                  </span>
                 </p>
                 <div className="mt-2">
                   <AudienceBadge policy={audience} lang={lang} />

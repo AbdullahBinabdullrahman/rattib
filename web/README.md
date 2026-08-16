@@ -28,10 +28,11 @@ Because a static file has no server to resolve paths against, routing moves to t
 4. **Booking** — pick a women-only session and try to book it. Every guest must have a verified identity and must match the policy; payment stays disabled until the whole party passes. Switch the header toggle to **Male** and the same experience disappears from Explore entirely.
 5. **My bookings** — the reservation lifecycle: pending with a live SLA countdown, then accepted with a check-in code, or rejected/expired with a full refund.
 6. **Expert portal** (switch persona in the header) — incoming requests with the SLA clock, accept/reject, and the listing set.
-7. **Edit an experience** — **Edit** on any listing opens a single form: bilingual content side by side, pricing, audience policy, and status. Changes save immediately and show on the public page. Pause a listing and it leaves the map.
-8. **Credentials** — the three-layer model. Note the **At-Turaif heritage walk** is blocked because guided tours need a tourism licence this expert doesn't hold. Add the licence and the listing unblocks.
-9. **New experience** — the publish wizard. Pick the "Guided tours" category and the credential gate blocks submission at the review step.
-10. **Market** — the investor slide: market size, the inbound/domestic divergence, competitors, and differentiation.
+7. **Edit an experience** — **Edit** on any listing opens a single form: bilingual content side by side, location, pricing, audience policy, and status. Changes save immediately and show on the public page. Pause a listing and it leaves the map.
+8. **Set a location** — in both the create wizard and the edit form, the location picker works three ways: search a district or landmark by name (Arabic or English, tolerant of spelling), click or drag the pin on the map, or type coordinates. The map always reflects the current value, so you can start one way and adjust another.
+9. **Credentials** — the three-layer model. Note the **At-Turaif heritage walk** is blocked because guided tours need a tourism licence this expert doesn't hold. Add the licence and the listing unblocks.
+10. **New experience** — the publish wizard. Pick the "Guided tours" category and the credential gate blocks submission at the review step.
+11. **Market** — the investor slide: market size, the inbound/domestic divergence, competitors, and differentiation.
 
 ## Accounts
 
@@ -68,7 +69,8 @@ app/                    routes
   market/               market research, investor-facing
   economics/            live unit-economics model
 components/
-  RiyadhMap.tsx         Leaflet map, local geometry + optional tiles
+  RiyadhMap.tsx         Leaflet browse map, local geometry + optional tiles
+  LocationPicker.tsx    search / map / coordinates location entry
   ExperienceCard.tsx
   Shell.tsx             header, nav, account menu, demo switches
   motion.tsx            scroll reveals, route transitions, counters
@@ -76,6 +78,7 @@ components/
 lib/
   types.ts              domain model
   eligibility.ts        guest + host eligibility rules
+  riyadh.ts             city geometry, place gazetteer, search
   seed.ts               experts, experiences, credentials, slot generation
   i18n.ts               AR/EN dictionary and domain labels
   format.ts             Gregorian/Riyadh/SAR formatting

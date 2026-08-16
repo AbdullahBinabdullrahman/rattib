@@ -4,6 +4,12 @@ import type * as Leaflet from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import type { Experience, Lang } from "@/lib/types";
 import { CATEGORY_GLYPH, pick } from "@/lib/i18n";
+import {
+  DISTRICTS,
+  RIYADH_CENTER,
+  TILE_URL,
+  addBaseLayers,
+} from "@/lib/riyadh";
 
 /**
  * Riyadh map, built on Leaflet (BSD-2, open source, no API key).
@@ -21,57 +27,6 @@ import { CATEGORY_GLYPH, pick } from "@/lib/i18n";
  * all inside a single self-contained HTML file. Leaflet needs no worker and
  * no WebGL, so the same component works in the app and in the shared build.
  */
-
-const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
-const RIYADH_CENTER: [number, number] = [24.715, 46.685];
-
-/* ------------------------------------------------------------------ */
-/* Local geometry, as [lat, lon] the way Leaflet expects               */
-/* ------------------------------------------------------------------ */
-
-const WADI_HANIFAH: [number, number][] = [
-  [24.905, 46.565],
-  [24.82, 46.548],
-  [24.771, 46.561],
-  [24.732, 46.578],
-  [24.681, 46.592],
-  [24.63, 46.612],
-  [24.575, 46.641],
-];
-
-const ROADS: [number, number][][] = [
-  [[24.585, 46.675], [24.845, 46.675]], // King Fahd Rd
-  [[24.59, 46.762], [24.83, 46.762]], // Eastern Ring Rd
-  [[24.7605, 46.58], [24.7605, 46.83]], // Northern Ring Rd
-  [[24.6905, 46.6], [24.6905, 46.83]], // Makkah Al Mukarramah Rd
-  [[24.7215, 46.585], [24.7215, 46.8]], // King Abdullah Rd
-  [[24.585, 46.72], [24.83, 46.72]], // King Abdulaziz Rd
-  [[24.706, 46.6], [24.706, 46.8]], // Al Urubah Rd
-];
-
-const URBAN_AREA: [number, number][] = [
-  [24.6, 46.57],
-  [24.6, 46.83],
-  [24.72, 46.85],
-  [24.85, 46.82],
-  [24.9, 46.66],
-  [24.84, 46.57],
-  [24.72, 46.545],
-];
-
-export const DISTRICTS: { ar: string; en: string; lat: number; lon: number }[] = [
-  { ar: "الدرعية", en: "Diriyah", lat: 24.734, lon: 46.5735 },
-  { ar: "حطين", en: "Hittin", lat: 24.751, lon: 46.606 },
-  { ar: "الياسمين", en: "Al Yasmin", lat: 24.824, lon: 46.632 },
-  { ar: "الصحافة", en: "Al Sahafa", lat: 24.799, lon: 46.646 },
-  { ar: "النخيل", en: "Al Nakheel", lat: 24.727, lon: 46.655 },
-  { ar: "العليا", en: "Olaya", lat: 24.6905, lon: 46.688 },
-  { ar: "المربع", en: "Al Murabba", lat: 24.6455, lon: 46.7135 },
-  { ar: "قصر الحكم", en: "Qasr Al Hokm", lat: 24.6265, lon: 46.716 },
-  { ar: "الملز", en: "Al Malaz", lat: 24.664, lon: 46.7385 },
-  { ar: "الروضة", en: "Al Rawdah", lat: 24.748, lon: 46.782 },
-  { ar: "السفارات", en: "Diplomatic Quarter", lat: 24.678, lon: 46.6185 },
-];
 
 /**
  * Leaflet positions a marker by writing a transform onto its element, so the
@@ -134,40 +89,8 @@ export default function RiyadhMap({
         scrollWheelZoom: true,
       });
 
-      // Local geometry first: this is what makes the map legible with no
-      // network at all, and it sits under the tiles when they do arrive.
-      L.polygon(URBAN_AREA, {
-        color: "#232833",
-        weight: 1,
-        fillColor: "#161a21",
-        fillOpacity: 1,
-        interactive: false,
-      }).addTo(m);
-
-      L.polyline(WADI_HANIFAH, {
-        color: "#1c3a33",
-        weight: 22,
-        opacity: 0.9,
-        lineCap: "round",
-        lineJoin: "round",
-        interactive: false,
-      }).addTo(m);
-
-      L.polyline(WADI_HANIFAH, {
-        color: "#2f6a58",
-        weight: 6,
-        lineCap: "round",
-        interactive: false,
-      }).addTo(m);
-
-      ROADS.forEach((road) =>
-        L.polyline(road, {
-          color: "#333a46",
-          weight: 3,
-          interactive: false,
-        }).addTo(m),
-      );
-
+      // Shared with the location picker so both maps read the same.
+      addBaseLayers(L, m);
 
       map.current = m;
       setReady(true);
