@@ -110,7 +110,7 @@ export default function NewExperience() {
     <div className="mx-auto max-w-2xl px-4 py-8">
       <Link
         href="/expert"
-        className="text-sm text-muted hover:text-ink font-semibold"
+        className="text-sm text-muted hover:text-fg font-semibold"
       >
         ← {t("backTo", lang)} {t("expertDash", lang)}
       </Link>
@@ -171,7 +171,7 @@ export default function NewExperience() {
                     className={`chip border ${
                       category === c
                         ? "bg-palm text-white border-transparent"
-                        : "bg-surface text-muted border-line hover:border-ink"
+                        : "bg-panel text-muted border-line hover:border-brass"
                     }`}
                   >
                     {pick(CATEGORY_LABEL[c], lang)}
@@ -239,7 +239,7 @@ export default function NewExperience() {
                   className={`w-full text-start rounded-xl border p-3 flex items-center gap-3 transition-colors ${
                     audience === a
                       ? "border-palm bg-palm-soft"
-                      : "border-line hover:border-ink"
+                      : "border-line hover:border-brass"
                   }`}
                 >
                   <AudienceBadge policy={a} lang={lang} size="md" />
@@ -289,7 +289,7 @@ export default function NewExperience() {
                   ✓ {t("publishReady", lang)}
                 </div>
               ) : (
-                <div className="rounded-xl bg-[#fdf0f0] text-[#a33a3a] p-4 text-sm">
+                <div className="rounded-xl bg-danger-soft text-danger p-4 text-sm">
                   <p className="font-extrabold mb-1">
                     {t("publishBlocked", lang)}
                   </p>

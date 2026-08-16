@@ -21,6 +21,7 @@ import Credentials from "@/app/expert/credentials/page";
 import NewExperience from "@/app/expert/new/page";
 import Market from "@/app/market/page";
 import Economics from "@/app/economics/page";
+import Auth from "@/app/auth/page";
 
 type Route = { pattern: string; component: React.ComponentType };
 
@@ -31,6 +32,7 @@ const ROUTES: Route[] = [
   { pattern: "/bookings", component: Bookings },
   { pattern: "/market", component: Market },
   { pattern: "/economics", component: Economics },
+  { pattern: "/auth", component: Auth },
   { pattern: "/expert", component: ExpertDashboard },
   { pattern: "/expert/credentials", component: Credentials },
   { pattern: "/expert/new", component: NewExperience },

@@ -1,53 +1,151 @@
 @import "tailwindcss";
+/* Relative rather than a bare specifier, so both the Next build and the
+   standalone Tailwind CLI build resolve it identically. */
+@import "../node_modules/leaflet/dist/leaflet.css";
 
+/*
+ * "Night majlis" — a lamp-lit room where the craft happens after dark.
+ *
+ * Committed single visual world: the palette is painted explicitly rather
+ * than inherited, so the page holds on any host background.
+ *
+ * Neutrals carry a cool blue bias so the brass accent reads warm against
+ * them; brass is the light source, everything else recedes.
+ */
 @theme {
-  --color-sand: #fbf8f3;
-  --color-sand-deep: #f3ece1;
-  --color-surface: #ffffff;
-  --color-ink: #17140f;
-  --color-muted: #6e6559;
-  --color-line: #e9e1d5;
+  /* Grounds */
+  --color-base: #0c0e12;
+  --color-base-2: #090b0e;
+  --color-panel: #15181e;
+  --color-panel-2: #1e222a;
+  --color-line: #2a2f39;
+  --color-line-soft: #21252d;
 
-  /* Palm green — primary */
-  --color-palm: #14614c;
-  --color-palm-deep: #0d4436;
-  --color-palm-soft: #e4efea;
+  /* Text */
+  --color-fg: #ede8df;
+  --color-muted: #949ca8;
+  --color-faint: #6b7280;
 
-  /* Clay — accent, used for craft categories */
-  --color-clay: #bd5f39;
-  --color-clay-soft: #faece5;
+  /* Brass — the accent, and the only truly warm light in the room */
+  --color-brass: #d8a94e;
+  --color-brass-bright: #ecc06b;
+  --color-brass-deep: #8a6a26;
+  --color-brass-soft: #33290f;
 
-  --color-gold: #b0872b;
-  --color-gold-soft: #f8f0dc;
+  /* Palm — verified, confirmed, success */
+  --color-palm: #43a886;
+  --color-palm-bright: #5cc7a2;
+  --color-palm-deep: #12352b;
+  --color-palm-soft: #14322a;
 
-  /* Rose — reserved for women-only audience locks */
-  --color-rose: #a63c6b;
-  --color-rose-soft: #fbeaf1;
+  /* Rose — reserved exclusively for women-only audience locks */
+  --color-rose: #ec6ba0;
+  --color-rose-deep: #8d2f56;
+  --color-rose-soft: #3a1a2b;
+
+  /* Clay — craft categories */
+  --color-clay: #de7b45;
+  --color-clay-soft: #33200f;
+
+  /* Danger */
+  --color-danger: #f2736b;
+  --color-danger-soft: #3a1a1a;
+  --color-danger-line: #55292a;
+
+  /* Nafath identity verification */
+  --color-nafath: #4b7fd4;
 
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     "Noto Sans Arabic", "Segoe UI Arabic", Tahoma, Arial, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html,
 body {
-  background: var(--color-sand);
-  color: var(--color-ink);
+  background: var(--color-base);
+  color: var(--color-fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Arabic reads better with slightly more line height and less tight tracking. */
+body {
+  /* A single warm pool of light behind the header, like a lamp in the room. */
+  background-image: radial-gradient(
+    120rem 40rem at 50% -18rem,
+    rgba(216, 169, 78, 0.09),
+    transparent 65%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Arabic wants more leading and no negative tracking. */
 html[dir="rtl"] body {
-  line-height: 1.75;
+  line-height: 1.8;
   letter-spacing: 0;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+html[dir="ltr"] h1,
+html[dir="ltr"] h2 {
+  letter-spacing: -0.025em;
+}
+
+/* Figures line up in columns everywhere in this product. */
+table,
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--color-brass);
+  color: #0c0e12;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brass);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Scrollbars, so they don't punch a bright hole in a dark page. */
+* {
+  scrollbar-color: var(--color-line) transparent;
+  scrollbar-width: thin;
+}
+
 @layer components {
+  /* Panels read as lit from above: hairline border plus a 1px inner highlight. */
   .card {
-    background: var(--color-surface);
+    background: var(--color-panel);
     border: 1px solid var(--color-line);
     border-radius: 1rem;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  .card-hover {
+    transition:
+      transform 0.35s var(--ease-out-soft),
+      border-color 0.35s var(--ease-out-soft),
+      box-shadow 0.35s var(--ease-out-soft);
+  }
+  .card-hover:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--color-brass) 45%, var(--color-line));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      0 14px 34px -12px rgba(0, 0, 0, 0.85),
+      0 0 0 1px rgba(216, 169, 78, 0.06);
   }
 
   .btn {
@@ -55,40 +153,52 @@ html[dir="rtl"] body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
+    border-radius: 0.7rem;
+    font-weight: 650;
     padding: 0.65rem 1.15rem;
-    transition: all 0.15s ease;
     cursor: pointer;
     border: 1px solid transparent;
     font-size: 0.925rem;
+    letter-spacing: -0.005em;
+    transition:
+      background-color 0.2s var(--ease-out-soft),
+      border-color 0.2s var(--ease-out-soft),
+      color 0.2s var(--ease-out-soft),
+      transform 0.12s var(--ease-out-soft);
+  }
+  .btn:not(:disabled):active {
+    transform: translateY(1px);
   }
   .btn:disabled {
-    opacity: 0.45;
+    opacity: 0.38;
     cursor: not-allowed;
   }
+
   .btn-primary {
-    background: var(--color-palm);
-    color: #fff;
+    background: var(--color-brass);
+    color: #16120a;
   }
   .btn-primary:not(:disabled):hover {
-    background: var(--color-palm-deep);
+    background: var(--color-brass-bright);
   }
+
   .btn-ghost {
-    background: var(--color-surface);
+    background: var(--color-panel-2);
     border-color: var(--color-line);
-    color: var(--color-ink);
+    color: var(--color-fg);
   }
   .btn-ghost:not(:disabled):hover {
-    border-color: var(--color-ink);
+    border-color: var(--color-brass);
+    color: var(--color-brass);
   }
+
   .btn-danger {
-    background: var(--color-surface);
-    border-color: #e4c6c6;
-    color: #a33a3a;
+    background: transparent;
+    border-color: var(--color-danger-line);
+    color: var(--color-danger);
   }
   .btn-danger:not(:disabled):hover {
-    background: #fdf3f3;
+    background: var(--color-danger-soft);
   }
 
   .chip {
@@ -98,7 +208,7 @@ html[dir="rtl"] body {
     border-radius: 999px;
     padding: 0.2rem 0.6rem;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 650;
     line-height: 1.5;
     white-space: nowrap;
   }
@@ -106,38 +216,272 @@ html[dir="rtl"] body {
   .field {
     width: 100%;
     border: 1px solid var(--color-line);
-    background: var(--color-surface);
-    border-radius: 0.75rem;
-    padding: 0.6rem 0.85rem;
+    background: var(--color-base-2);
+    border-radius: 0.7rem;
+    padding: 0.65rem 0.85rem;
     font-size: 0.925rem;
-    color: var(--color-ink);
+    color: var(--color-fg);
+    transition: border-color 0.2s var(--ease-out-soft);
+  }
+  .field::placeholder {
+    color: var(--color-faint);
+  }
+  .field:hover {
+    border-color: color-mix(in srgb, var(--color-brass) 35%, var(--color-line));
   }
   .field:focus {
-    outline: 2px solid var(--color-palm);
-    outline-offset: -1px;
+    outline: none;
+    border-color: var(--color-brass);
+    box-shadow: 0 0 0 3px rgba(216, 169, 78, 0.14);
   }
 
   .label {
     display: block;
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 700;
     color: var(--color-muted);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  /* Arabic has no case, so uppercase tracking would only damage it. */
+  html[dir="rtl"] .label {
+    text-transform: none;
     letter-spacing: 0.02em;
+  }
+
+  .hairline {
+    border-top: 1px solid var(--color-line-soft);
   }
 }
 
-/* The map pin drop-in */
-@keyframes pin-in {
+/* ------------------------------------------------------------------ */
+/* Motion                                                              */
+/* ------------------------------------------------------------------ */
+
+@keyframes rise-in {
   from {
     opacity: 0;
-    transform: translateY(-6px) scale(0.85);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
   }
 }
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pin-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.7);
+  }
+  70% {
+    transform: translateY(1px) scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+/* Route changes lift into place. */
+.page-enter {
+  animation: rise-in 0.42s var(--ease-out-soft) both;
+}
+
+/* Scroll reveals: hidden until observed, then staggered by index. */
+.reveal {
+  opacity: 0;
+}
+.reveal[data-shown="true"] {
+  animation: rise-in 0.6s var(--ease-out-soft) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
 .pin-in {
-  animation: pin-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.3) backwards;
+  animation: pin-drop 0.5s var(--ease-out-soft) both;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-panel-2) 25%,
+    #262b34 50%,
+    var(--color-panel-2) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Leaflet overrides — its default chrome is built for light basemaps  */
+/* ------------------------------------------------------------------ */
+
+.leaflet-container {
+  background: #0d1014;
+  font: inherit;
+  outline: none;
+}
+.leaflet-tile-pane {
+  /* OSM tiles are light; damp and cool them so they sit in the dark page. */
+  filter: invert(1) hue-rotate(185deg) brightness(0.85) contrast(0.9)
+    saturate(0.55);
+}
+.leaflet-bar,
+.leaflet-bar a {
+  background: var(--color-panel) !important;
+  border-color: var(--color-line) !important;
+  color: var(--color-fg) !important;
+}
+.leaflet-bar a:hover {
+  background: var(--color-panel-2) !important;
+  color: var(--color-brass) !important;
+}
+.leaflet-bar {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55) !important;
+}
+.leaflet-control-attribution {
+  background: rgba(12, 14, 18, 0.78) !important;
+  color: var(--color-faint) !important;
+  font-size: 10px !important;
+}
+.leaflet-control-attribution a {
+  color: var(--color-muted) !important;
+}
+/* Marker wrappers must not paint over the map. */
+.rattib-pin-icon,
+.rattib-district-icon {
+  background: none;
+  border: none;
+}
+
+/* Experience pins. Rose is reserved for women-only, brass for everything
+   else — the same two-colour rule the legend states.
+
+   The wrapper is the marker element MapLibre positions; it must stay free of
+   transforms. All visual treatment lives on the button inside it. */
+.rattib-pin-wrap {
+  cursor: pointer;
+  line-height: 0;
+}
+
+.rattib-pin {
+  --pin: var(--color-brass);
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px 999px 999px 4px;
+  transform: rotate(45deg);
+  background: var(--pin);
+  border: 2px solid rgba(12, 14, 18, 0.85);
+  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.9);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    transform 0.3s var(--ease-out-soft),
+    box-shadow 0.3s var(--ease-out-soft);
+}
+.rattib-pin > span {
+  transform: rotate(-45deg);
+  font-size: 1.05rem;
+  line-height: 1;
+  pointer-events: none;
+}
+.rattib-pin-wrap[data-tone="rose"] .rattib-pin {
+  --pin: var(--color-rose);
+}
+.rattib-pin-wrap:hover .rattib-pin {
+  transform: rotate(45deg) scale(1.12);
+}
+.rattib-pin-wrap[data-selected="true"] {
+  z-index: 3;
+}
+.rattib-pin-wrap[data-selected="true"] .rattib-pin {
+  transform: rotate(45deg) scale(1.22);
+  box-shadow:
+    0 8px 22px -4px rgba(0, 0, 0, 0.95),
+    0 0 0 4px color-mix(in srgb, var(--pin) 35%, transparent);
+}
+/* The drop keyframes translate, so compose them with the rotation. */
+.rattib-pin.pin-in {
+  animation-name: pin-drop-rotated;
+}
+@keyframes pin-drop-rotated {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) rotate(45deg) scale(0.6);
+  }
+  70% {
+    transform: translateY(1px) rotate(45deg) scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+  }
+}
+
+.rattib-district {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #8b93a0;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow:
+    0 0 4px #0c0e12,
+    0 0 8px #0c0e12;
 }

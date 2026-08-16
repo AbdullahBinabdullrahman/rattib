@@ -84,7 +84,7 @@ export default function Bookings() {
 
                     {/* Pending — the SLA clock the customer can watch */}
                     {b.status === "pending" && (
-                      <div className="mt-3 rounded-xl bg-gold-soft text-gold p-3 text-sm font-semibold flex items-center justify-between gap-2 flex-wrap">
+                      <div className="mt-3 rounded-xl bg-brass-soft text-brass p-3 text-sm font-semibold flex items-center justify-between gap-2 flex-wrap">
                         <span>{t("respondBy", lang)}</span>
                         <span dir="ltr">{countdown(b.respondBy, lang, now)}</span>
                       </div>
@@ -105,7 +105,7 @@ export default function Bookings() {
                     )}
 
                     {refunded && (
-                      <div className="mt-3 rounded-xl bg-sand-deep text-muted p-3 text-sm">
+                      <div className="mt-3 rounded-xl bg-panel-2 text-muted p-3 text-sm">
                         <span className="font-semibold">
                           {t("refunded", lang)}
                         </span>

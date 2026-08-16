@@ -278,7 +278,7 @@ export default function Economics() {
                   ? "text-palm"
                   : host.uplift > 0
                     ? "text-clay"
-                    : "text-[#a33a3a]"
+                    : "text-danger"
               }`}
               dir="ltr"
             >
@@ -289,7 +289,7 @@ export default function Economics() {
           </div>
 
           {upliftTooSmall && (
-            <p className="mt-4 rounded-xl bg-[#fdf0f0] text-[#a33a3a] p-3 text-sm font-semibold">
+            <p className="mt-4 rounded-xl bg-danger-soft text-danger p-3 text-sm font-semibold">
               {tt("hostWarn")}
             </p>
           )}
@@ -359,7 +359,7 @@ export default function Economics() {
             <p className="text-xs font-bold text-muted uppercase tracking-wide">
               {tt("burn")}
             </p>
-            <p className="text-2xl font-extrabold text-[#a33a3a] mt-1">
+            <p className="text-2xl font-extrabold text-danger mt-1">
               {millions(burn, lang)}
             </p>
           </div>
@@ -499,7 +499,7 @@ function Row({
   tone?: "palm" | "danger";
 }) {
   const color =
-    tone === "palm" ? "text-palm" : tone === "danger" ? "text-[#a33a3a]" : "";
+    tone === "palm" ? "text-palm" : tone === "danger" ? "text-danger" : "";
   return (
     <div
       className={`flex items-center justify-between gap-3 py-2 ${
@@ -532,7 +532,7 @@ function Metric({
   tone?: "ink" | "palm" | "clay";
 }) {
   const color =
-    tone === "palm" ? "text-palm" : tone === "clay" ? "text-clay" : "text-ink";
+    tone === "palm" ? "text-palm" : tone === "clay" ? "text-clay" : "text-fg";
   return (
     <div className="card p-4">
       <p className="text-[11px] font-bold text-muted uppercase tracking-wide">
@@ -575,7 +575,7 @@ function HostBar({
       <p className="text-xs text-muted mt-0.5">
         {Math.round(seats)} {seatsLabel}
       </p>
-      <div className="h-2.5 rounded-full bg-sand-deep mt-3 overflow-hidden">
+      <div className="h-2.5 rounded-full bg-panel-2 mt-3 overflow-hidden">
         <div
           className={`h-full rounded-full ${bg} transition-all duration-300`}
           style={{ width: `${pct}%` }}
@@ -599,7 +599,7 @@ function Td({
   tone?: "palm" | "danger";
 }) {
   const color =
-    tone === "palm" ? "text-palm" : tone === "danger" ? "text-[#a33a3a]" : "";
+    tone === "palm" ? "text-palm" : tone === "danger" ? "text-danger" : "";
   return (
     <td className={`px-4 py-3 ${bold ? "font-extrabold" : ""} ${color}`}>
       {children}

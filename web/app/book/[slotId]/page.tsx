@@ -90,7 +90,7 @@ export default function BookPage() {
     <div className="mx-auto max-w-4xl px-4 py-8">
       <Link
         href={`/experience/${exp.id}`}
-        className="text-sm text-muted hover:text-ink font-semibold"
+        className="text-sm text-muted hover:text-fg font-semibold"
       >
         ← {pick(exp.title, lang)}
       </Link>
@@ -176,7 +176,7 @@ export default function BookPage() {
                                 ? gen === "female"
                                   ? "bg-rose text-white"
                                   : "bg-palm text-white"
-                                : "bg-surface text-muted"
+                                : "bg-panel text-muted"
                             }`}
                           >
                             {t(gen === "female" ? "female" : "male", lang)}
@@ -192,7 +192,7 @@ export default function BookPage() {
                         ) : (
                           <button
                             onClick={() => setGuest(i, { verified: true })}
-                            className="btn !py-1.5 !px-3 !text-xs bg-[#1B3A6B] text-white"
+                            className="btn !py-1.5 !px-3 !text-xs bg-nafath text-white"
                           >
                             {t("verifyNafath", lang)}
                           </button>
@@ -203,7 +203,7 @@ export default function BookPage() {
                           onClick={() =>
                             setGuests((gs) => gs.filter((_, idx) => idx !== i))
                           }
-                          className="text-muted hover:text-ink text-lg px-1"
+                          className="text-muted hover:text-fg text-lg px-1"
                           aria-label={t("remove", lang)}
                         >
                           ×
@@ -239,7 +239,7 @@ export default function BookPage() {
                   className={`rounded-xl border p-3 text-sm font-semibold transition-colors ${
                     method === m
                       ? "border-palm bg-palm-soft text-palm"
-                      : "border-line hover:border-ink"
+                      : "border-line hover:border-brass"
                   }`}
                 >
                   {pick(PAYMENT_LABEL[m], lang)}

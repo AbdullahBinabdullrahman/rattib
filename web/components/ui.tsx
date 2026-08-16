@@ -10,8 +10,8 @@ import { AUDIENCE_LABEL, CATEGORY_GLYPH, CATEGORY_LABEL, pick, t } from "@/lib/i
 const AUDIENCE_STYLE: Record<AudiencePolicy, string> = {
   women_only: "bg-rose-soft text-rose",
   men_only: "bg-palm-soft text-palm",
-  families_only: "bg-gold-soft text-gold",
-  mixed: "bg-sand-deep text-muted",
+  families_only: "bg-brass-soft text-brass",
+  mixed: "bg-panel-2 text-muted",
   private_buyout: "bg-clay-soft text-clay",
 };
 
@@ -117,7 +117,7 @@ export function CategoryChip({
   lang: Lang;
 }) {
   return (
-    <span className="chip bg-sand-deep text-muted">
+    <span className="chip bg-panel-2 text-muted">
       <span aria-hidden>{CATEGORY_GLYPH[category]}</span>
       {pick(CATEGORY_LABEL[category], lang)}
     </span>
@@ -131,7 +131,7 @@ export function CategoryChip({
 export function Stars({ rating, count }: { rating: number; count?: number }) {
   return (
     <span className="inline-flex items-center gap-1 text-sm">
-      <span className="text-gold" aria-hidden>
+      <span className="text-brass" aria-hidden>
         ★
       </span>
       <span className="font-semibold">{rating.toFixed(1)}</span>
@@ -143,11 +143,11 @@ export function Stars({ rating, count }: { rating: number; count?: number }) {
 }
 
 const BOOKING_STYLE: Record<BookingStatus, string> = {
-  pending: "bg-gold-soft text-gold",
+  pending: "bg-brass-soft text-brass",
   accepted: "bg-palm-soft text-palm",
-  rejected: "bg-[#fdf0f0] text-[#a33a3a]",
-  expired: "bg-sand-deep text-muted",
-  cancelled: "bg-sand-deep text-muted",
+  rejected: "bg-danger-soft text-danger",
+  expired: "bg-panel-2 text-muted",
+  cancelled: "bg-panel-2 text-muted",
   completed: "bg-palm-soft text-palm",
 };
 
@@ -176,10 +176,10 @@ export function BookingStatusChip({
 
 const EXP_STYLE: Record<ExperienceStatus, string> = {
   published: "bg-palm-soft text-palm",
-  draft: "bg-sand-deep text-muted",
-  blocked: "bg-[#fdf0f0] text-[#a33a3a]",
-  in_review: "bg-gold-soft text-gold",
-  paused: "bg-sand-deep text-muted",
+  draft: "bg-panel-2 text-muted",
+  blocked: "bg-danger-soft text-danger",
+  in_review: "bg-brass-soft text-brass",
+  paused: "bg-panel-2 text-muted",
 };
 
 const EXP_KEY = {

@@ -22,7 +22,7 @@ export default function ExperienceCard({
   return (
     <Link
       href={`/experience/${experience.id}`}
-      className="card overflow-hidden group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col"
+      className="card card-hover overflow-hidden group flex flex-col h-full"
     >
       <div className="relative">
         <CategoryArt
@@ -42,7 +42,7 @@ export default function ExperienceCard({
 
       <div className="p-4 flex flex-col gap-2 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-bold leading-snug group-hover:text-palm transition-colors">
+          <h3 className="font-bold leading-snug group-hover:text-brass transition-colors">
             {pick(experience.title, lang)}
           </h3>
           {expert && <Stars rating={expert.rating} />}
@@ -55,7 +55,7 @@ export default function ExperienceCard({
         {expert && (
           <div className="flex items-center gap-2 text-xs text-muted mt-auto pt-2">
             <Avatar initials={expert.initials} size={24} />
-            <span className="font-semibold text-ink">
+            <span className="font-semibold text-fg">
               {pick(expert.name, lang)}
             </span>
             <span>·</span>

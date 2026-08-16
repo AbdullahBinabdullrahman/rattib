@@ -68,7 +68,7 @@ export default function ExperienceDetail() {
     <div className="mx-auto max-w-6xl px-4 py-8">
       <Link
         href="/explore"
-        className="text-sm text-muted hover:text-ink font-semibold"
+        className="text-sm text-muted hover:text-fg font-semibold"
       >
         ← {t("backTo", lang)} {t("navExplore", lang)}
       </Link>
@@ -88,10 +88,10 @@ export default function ExperienceDetail() {
         <div>
           <div className="flex items-center gap-2 flex-wrap mb-3">
             <CategoryChip category={exp.category} lang={lang} />
-            <span className="chip bg-sand-deep text-muted">
+            <span className="chip bg-panel-2 text-muted">
               {pick(exp.district, lang)}
             </span>
-            <span className="chip bg-sand-deep text-muted">
+            <span className="chip bg-panel-2 text-muted">
               {exp.bookingMode === "instant"
                 ? t("instantBook", lang)
                 : t("requestBook", lang)}
@@ -242,7 +242,7 @@ export default function ExperienceDetail() {
                 <div className="mt-5">
                   <span className="label">{t("pickSlot", lang)}</span>
                   {!mounted ? (
-                    <div className="h-24 rounded-xl bg-sand-deep animate-pulse" />
+                    <div className="h-24 rounded-xl bg-panel-2 animate-pulse" />
                   ) : (
                     <div className="space-y-2 max-h-72 overflow-y-auto pe-1">
                       {slots.map((s) => {
@@ -257,7 +257,7 @@ export default function ExperienceDetail() {
                             className={`w-full text-start rounded-xl border p-3 transition-colors ${
                               active
                                 ? "border-palm bg-palm-soft"
-                                : "border-line hover:border-ink"
+                                : "border-line hover:border-brass"
                             } ${full ? "opacity-45 cursor-not-allowed" : ""}`}
                           >
                             <div className="font-semibold text-sm leading-snug">

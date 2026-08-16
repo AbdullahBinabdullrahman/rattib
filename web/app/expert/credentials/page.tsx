@@ -25,7 +25,7 @@ export default function Credentials() {
     <div className="mx-auto max-w-3xl px-4 py-8">
       <Link
         href="/expert"
-        className="text-sm text-muted hover:text-ink font-semibold"
+        className="text-sm text-muted hover:text-fg font-semibold"
       >
         ← {t("backTo", lang)} {t("expertDash", lang)}
       </Link>
@@ -58,7 +58,7 @@ export default function Credentials() {
         held={held}
         add={addCredential}
         lang={lang}
-        tone="gold"
+        tone="brass"
       />
     </div>
   );
@@ -79,7 +79,7 @@ function Layer({
   held: (t: CredentialType) => HostCredential | undefined;
   add: (t: CredentialType) => void;
   lang: Lang;
-  tone: "palm" | "gold";
+  tone: "palm" | "brass";
 }) {
   return (
     <section className="mb-8">
@@ -98,7 +98,7 @@ function Layer({
             <div
               key={type}
               className={`card p-4 flex items-center justify-between gap-3 flex-wrap ${
-                expired ? "border-[#e4c6c6] bg-[#fdf7f7]" : ""
+                expired ? "border-danger-line bg-danger-soft" : ""
               }`}
             >
               <div className="min-w-0">
@@ -112,7 +112,7 @@ function Layer({
                     </span>
                   )}
                   {expired && (
-                    <span className="chip bg-[#fdf0f0] text-[#a33a3a]">
+                    <span className="chip bg-danger-soft text-danger">
                       {lang === "ar" ? "منتهية" : "Expired"}
                     </span>
                   )}

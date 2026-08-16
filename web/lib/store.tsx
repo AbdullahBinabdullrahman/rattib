@@ -26,6 +26,7 @@ import type {
   Lang,
   PaymentMethod,
   Persona,
+  Session,
   Slot,
 } from "./types";
 
@@ -38,6 +39,12 @@ interface DemoState {
 
   persona: Persona;
   setPersona: (p: Persona) => void;
+
+  /** Null until the visitor signs in. The demo stays usable signed out. */
+  session: Session | null;
+  signIn: (s: Session) => void;
+  signOut: () => void;
+  verifyIdentity: () => void;
 
   /** The signed-in customer's verified gender — drives audience filtering. */
   viewerGender: Gender;
@@ -122,6 +129,7 @@ function seedRequests(slots: Slot[]): Booking[] {
 export function DemoProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>("ar");
   const [persona, setPersona] = useState<Persona>("customer");
+  const [session, setSession] = useState<Session | null>(null);
   const [viewerGender, setViewerGender] = useState<Gender>("female");
   const [mounted, setMounted] = useState(false);
   const [now, setNow] = useState(() => new Date());
@@ -302,6 +310,22 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  const signIn = useCallback((s: Session) => {
+    setSession(s);
+    // The account decides which side of the marketplace you see.
+    setPersona(s.role);
+    setViewerGender(s.gender);
+  }, []);
+
+  const signOut = useCallback(() => {
+    setSession(null);
+    setPersona("customer");
+  }, []);
+
+  const verifyIdentity = useCallback(() => {
+    setSession((s) => (s ? { ...s, nafathVerified: true } : s));
+  }, []);
+
   const publishExperience = useCallback((exp: Experience) => {
     setExperiences((prev) => [exp, ...prev]);
   }, []);
@@ -313,6 +337,10 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       dir,
       persona,
       setPersona,
+      session,
+      signIn,
+      signOut,
+      verifyIdentity,
       viewerGender,
       setViewerGender,
       experts: EXPERTS,
@@ -337,6 +365,10 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       lang,
       dir,
       persona,
+      session,
+      signIn,
+      signOut,
+      verifyIdentity,
       viewerGender,
       experiences,
       slots,

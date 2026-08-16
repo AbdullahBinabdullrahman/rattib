@@ -172,13 +172,13 @@ export default function Market() {
               className={`card p-5 ${
                 d.tone === "up"
                   ? "border-palm/30 bg-palm-soft/40"
-                  : "border-[#e4c6c6] bg-[#fdf7f7]"
+                  : "border-danger-line bg-danger-soft"
               }`}
             >
               <p className="text-sm font-semibold">{pick(d.label, lang)}</p>
               <p
                 className={`text-3xl font-extrabold mt-1 ${
-                  d.tone === "up" ? "text-palm" : "text-[#a33a3a]"
+                  d.tone === "up" ? "text-palm" : "text-danger"
                 }`}
                 dir="ltr"
               >

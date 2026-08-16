@@ -8,6 +8,21 @@ export type Bi = { ar: string; en: string };
 export type Persona = "customer" | "expert";
 
 /**
+ * A signed-in account. Demo-only: there is no backend, no password storage
+ * and no real Nafath integration — this models the shape auth would take,
+ * including the fact that identity verification is a separate step from
+ * having an account.
+ */
+export interface Session {
+  name: string;
+  role: Persona;
+  gender: Gender;
+  /** Verified through Nafath. Required to book a gender-locked experience. */
+  nafathVerified: boolean;
+  contact: string;
+}
+
+/**
  * Who an experience is open to. Not a boolean — see product brief §2.1.
  * Gender lock is a supply-side unlock: many hosts list only if a
  * women-only room is guaranteed.

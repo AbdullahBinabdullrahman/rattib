@@ -165,7 +165,7 @@ export default function Explore() {
             step={10}
             value={maxPrice}
             onChange={(e) => setMaxPrice(Number(e.target.value))}
-            className="w-full accent-[#14614C]"
+            className="w-full accent-brass"
           />
         </div>
 
@@ -174,7 +174,7 @@ export default function Explore() {
             type="checkbox"
             checked={todayOnly}
             onChange={(e) => setTodayOnly(e.target.checked)}
-            className="w-4 h-4 accent-[#BD5F39]"
+            className="w-4 h-4 accent-clay"
           />
           {t("todayOnly", lang)}
         </label>
@@ -182,7 +182,7 @@ export default function Explore() {
 
       {/* Map */}
       <div className="card overflow-hidden mb-6 relative">
-        <div className="aspect-[4/3] sm:aspect-[16/9] bg-sand-deep">
+        <div className="h-[440px] sm:h-[560px] bg-panel-2">
           <RiyadhMap
             experiences={filtered}
             selectedId={selected}
@@ -207,7 +207,7 @@ export default function Explore() {
                   </h3>
                   <button
                     onClick={() => setSelected(null)}
-                    className="text-muted hover:text-ink text-lg leading-none shrink-0"
+                    className="text-muted hover:text-fg text-lg leading-none shrink-0"
                     aria-label="close"
                   >
                     ×
@@ -282,7 +282,7 @@ function FilterPill({
       className={`chip border transition-colors ${
         active
           ? `${activeClass} border-transparent`
-          : "bg-surface text-muted border-line hover:border-ink hover:text-ink"
+          : "bg-panel text-muted border-line hover:border-brass hover:text-fg"
       }`}
     >
       {label}

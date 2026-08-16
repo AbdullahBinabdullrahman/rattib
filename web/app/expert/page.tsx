@@ -67,7 +67,7 @@ export default function ExpertDashboard() {
         <Stat
           label={t("pendingRequests", lang)}
           value={mounted ? String(requests.length) : "—"}
-          tone="gold"
+          tone="brass"
         />
         <Stat
           label={t("myExperiences", lang)}
@@ -128,7 +128,7 @@ export default function ExpertDashboard() {
                     </p>
                     <p
                       className={`font-extrabold ${
-                        overdue ? "text-[#a33a3a]" : "text-gold"
+                        overdue ? "text-danger" : "text-brass"
                       }`}
                       dir="ltr"
                     >
@@ -187,7 +187,7 @@ export default function ExpertDashboard() {
 
                 {/* The credential gate, visible in the product */}
                 {e.status === "blocked" && e.blockedOn && (
-                  <div className="mt-3 rounded-xl bg-[#fdf0f0] text-[#a33a3a] p-3 text-sm">
+                  <div className="mt-3 rounded-xl bg-danger-soft text-danger p-3 text-sm">
                     <p className="font-semibold">
                       {t("publishBlockedBody", lang, {
                         c: pick(e.title, lang),
@@ -214,14 +214,14 @@ export default function ExpertDashboard() {
 function Stat({
   label,
   value,
-  tone = "ink",
+  tone = "fg",
 }: {
   label: string;
   value: string;
-  tone?: "ink" | "gold" | "palm";
+  tone?: "fg" | "brass" | "palm";
 }) {
   const color =
-    tone === "gold" ? "text-gold" : tone === "palm" ? "text-palm" : "text-ink";
+    tone === "brass" ? "text-brass" : tone === "palm" ? "text-palm" : "text-fg";
   return (
     <div className="card p-4">
       <p className="text-[11px] font-bold text-muted uppercase tracking-wide">
