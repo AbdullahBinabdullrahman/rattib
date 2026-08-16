@@ -135,9 +135,9 @@ export default function Shell({ children }: { children: ReactNode }) {
                     </p>
 
                     <div className="mt-3 pt-3 hairline">
-                      {session.nafathVerified ? (
+                      {session.identityVerified ? (
                         <span className="chip bg-palm-soft text-palm">
-                          ✓ {t("nafathVerified", lang)}
+                          ✓ {t("identityVerified", lang)}
                         </span>
                       ) : (
                         <div className="flex items-center justify-between gap-2">
@@ -146,7 +146,7 @@ export default function Shell({ children }: { children: ReactNode }) {
                           </span>
                           <button
                             onClick={verifyIdentity}
-                            className="btn !py-1 !px-2.5 !text-[11px] bg-nafath text-white"
+                            className="btn !py-1 !px-2.5 !text-[11px] bg-verify text-white"
                           >
                             {t("verifyNow", lang)}
                           </button>

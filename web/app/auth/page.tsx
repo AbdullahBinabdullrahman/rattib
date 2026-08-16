@@ -10,11 +10,12 @@ import type { Gender, Persona } from "@/lib/types";
 /**
  * Sign in and sign up for both sides of the marketplace.
  *
- * Demo-only: no backend, no password is stored, and "Nafath" simply flips a
- * verified flag. The flow is modelled faithfully though — role is chosen at
- * signup because it determines which portal you land in, and identity
- * verification is deliberately separate from having an account, since only
- * audience-locked bookings require it.
+ * Demo-only: no backend and no password is stored. The flow is modelled
+ * faithfully though — role is chosen at signup because it determines which
+ * portal you land in, and identity verification is deliberately a separate
+ * step from having an account, since only audience-locked bookings require
+ * it. Verification is provider-neutral here; a national identity provider
+ * would slot in behind the same call.
  */
 export default function Auth() {
   const router = useRouter();
@@ -33,14 +34,14 @@ export default function Auth() {
     password.length > 0 &&
     (mode === "in" || name.trim().length > 1);
 
-  const finish = (nafathVerified: boolean) => {
+  const finish = () => {
     setBusy(true);
     setTimeout(() => {
       signIn({
         name: name.trim() || (lang === "ar" ? "ضيف" : "Guest"),
         role,
         gender,
-        nafathVerified,
+        identityVerified: false,
         contact: contact.trim() || "—",
       });
       router.push(role === "expert" ? "/expert" : "/explore");
@@ -96,26 +97,6 @@ export default function Auth() {
       )}
 
       <div className="card p-6">
-        {/* Nafath first — it is how Saudi services actually authenticate. */}
-        <button
-          onClick={() => finish(true)}
-          disabled={busy}
-          className="btn w-full !py-3 bg-nafath text-white hover:brightness-110"
-        >
-          {t("nafathSignIn", lang)}
-        </button>
-        <p className="text-[11px] text-muted mt-2.5 leading-relaxed">
-          {t("nafathNote", lang)}
-        </p>
-
-        <div className="flex items-center gap-3 my-6">
-          <span className="h-px bg-line flex-1" />
-          <span className="text-[11px] text-faint font-semibold">
-            {t("orUse", lang)}
-          </span>
-          <span className="h-px bg-line flex-1" />
-        </div>
-
         <div className="space-y-4">
           {mode === "up" && (
             <div>
@@ -180,15 +161,19 @@ export default function Auth() {
         </div>
 
         <button
-          onClick={() => finish(false)}
+          onClick={finish}
           disabled={!complete || busy}
           className="btn btn-ghost w-full mt-6 !py-3"
         >
           {busy ? "…" : t(mode === "in" ? "signIn" : "signUp", lang)}
         </button>
 
+        <p className="text-[11px] text-muted mt-4 leading-relaxed">
+          {t("verifyLaterNote", lang)}
+        </p>
+
         {mode === "up" && role === "expert" && (
-          <p className="text-xs text-brass mt-4 leading-relaxed">
+          <p className="text-xs text-brass mt-2 leading-relaxed">
             {t("expertNextStep", lang)}
           </p>
         )}

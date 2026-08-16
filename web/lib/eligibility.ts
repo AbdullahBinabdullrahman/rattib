@@ -33,7 +33,7 @@ export function isLocked(policy: AudiencePolicy): boolean {
 }
 
 /**
- * A locked experience requires Nafath-verified identity, otherwise one
+ * A locked experience requires a verified identity, otherwise one
  * verified woman could book four seats for any group at all.
  */
 export function requiresVerifiedIdentity(policy: AudiencePolicy): boolean {
@@ -51,8 +51,8 @@ export function checkGuest(
     return {
       ok: false,
       reason: {
-        ar: "يتطلب التحقق من الهوية عبر نفاذ",
-        en: "Requires Nafath-verified identity",
+        ar: "يتطلب التحقق من الهوية",
+        en: "Requires a verified identity",
       },
     };
   }
@@ -104,8 +104,8 @@ export function checkParty(
       return {
         ok: false,
         reason: {
-          ar: "يتطلب التحقق من الهوية عبر نفاذ",
-          en: "Requires Nafath-verified identity",
+          ar: "يتطلب التحقق من الهوية",
+          en: "Requires a verified identity",
         },
       };
     }

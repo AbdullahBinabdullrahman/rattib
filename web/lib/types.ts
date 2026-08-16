@@ -9,7 +9,7 @@ export type Persona = "customer" | "expert";
 
 /**
  * A signed-in account. Demo-only: there is no backend, no password storage
- * and no real Nafath integration — this models the shape auth would take,
+ * and no real identity provider — this models the shape auth would take,
  * including the fact that identity verification is a separate step from
  * having an account.
  */
@@ -17,8 +17,8 @@ export interface Session {
   name: string;
   role: Persona;
   gender: Gender;
-  /** Verified through Nafath. Required to book a gender-locked experience. */
-  nafathVerified: boolean;
+  /** Identity confirmed. Required to book a gender-locked experience. */
+  identityVerified: boolean;
   contact: string;
 }
 
@@ -87,7 +87,7 @@ export interface Expert {
   reviewCount: number;
   sessionsHosted: number;
   hostingSince: number;
-  nafathVerified: boolean;
+  identityVerified: boolean;
   responseMinutes: number;
 }
 

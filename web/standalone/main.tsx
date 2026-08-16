@@ -22,6 +22,7 @@ import NewExperience from "@/app/expert/new/page";
 import Market from "@/app/market/page";
 import Economics from "@/app/economics/page";
 import Auth from "@/app/auth/page";
+import EditExperience from "@/app/expert/edit/[id]/page";
 
 type Route = { pattern: string; component: React.ComponentType };
 
@@ -36,6 +37,7 @@ const ROUTES: Route[] = [
   { pattern: "/expert", component: ExpertDashboard },
   { pattern: "/expert/credentials", component: Credentials },
   { pattern: "/expert/new", component: NewExperience },
+  { pattern: "/expert/edit/:id", component: EditExperience },
   { pattern: "/experience/:id", component: ExperienceDetail },
   { pattern: "/book/:slotId", component: BookPage },
 ];

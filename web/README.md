@@ -25,16 +25,19 @@ Because a static file has no server to resolve paths against, routing moves to t
 1. **Home** — the pitch, and what's bookable in Riyadh today.
 2. **Explore** — map-first discovery on a real Leaflet map: pan, zoom, click a pin. Pins are colour-coded by audience policy — rose is women-only, brass is everything else. Filter by category, audience, price, and "today only". **Streets** toggles OpenStreetMap tiles on; without them the map still draws Riyadh's built-up area, Wadi Hanifah, the main arteries and district labels from local geometry.
 3. **Experience detail** — description, what's included, host profile with the licences they hold, terms, and the slot picker.
-4. **Booking** — pick a women-only session and try to book it. Every guest must be Nafath-verified and must match the policy; payment stays disabled until the whole party passes. Switch the header toggle to **Male** and the same experience disappears from Explore entirely.
+4. **Booking** — pick a women-only session and try to book it. Every guest must have a verified identity and must match the policy; payment stays disabled until the whole party passes. Switch the header toggle to **Male** and the same experience disappears from Explore entirely.
 5. **My bookings** — the reservation lifecycle: pending with a live SLA countdown, then accepted with a check-in code, or rejected/expired with a full refund.
 6. **Expert portal** (switch persona in the header) — incoming requests with the SLA clock, accept/reject, and the listing set.
-7. **Credentials** — the three-layer model. Note the **At-Turaif heritage walk** is blocked because guided tours need a tourism licence this expert doesn't hold. Add the licence and the listing unblocks.
-8. **New experience** — the publish wizard. Pick the "Guided tours" category and the credential gate blocks submission at the review step.
-9. **Market** — the investor slide: market size, the inbound/domestic divergence, competitors, and differentiation.
+7. **Edit an experience** — **Edit** on any listing opens a single form: bilingual content side by side, pricing, audience policy, and status. Changes save immediately and show on the public page. Pause a listing and it leaves the map.
+8. **Credentials** — the three-layer model. Note the **At-Turaif heritage walk** is blocked because guided tours need a tourism licence this expert doesn't hold. Add the licence and the listing unblocks.
+9. **New experience** — the publish wizard. Pick the "Guided tours" category and the credential gate blocks submission at the review step.
+10. **Market** — the investor slide: market size, the inbound/domestic divergence, competitors, and differentiation.
 
 ## Accounts
 
-**Sign in** (header) opens signup and login for both roles. Nafath is offered first, because that is how Saudi services actually authenticate, and it is what unlocks audience-locked bookings; email and password work too but leave the account unverified until you verify from the account menu. Role is chosen at signup because it decides which portal you land in.
+**Sign in** (header) opens signup and login for both roles. Role is chosen at signup because it decides which portal you land in. Accounts start unverified; identity verification is a separate step from the account menu, and it is only needed to book an audience-locked experience.
+
+Identity verification is deliberately **provider-neutral** — the app calls a generic verify step rather than naming a provider, so a national identity service can be attached behind it later without touching the eligibility engine.
 
 Signed out, the demo stays fully usable and the header shows two switches instead:
 
@@ -60,7 +63,7 @@ app/                    routes
   experience/[id]/      detail and slot picker
   book/[slotId]/        booking, guest eligibility, payment
   bookings/             customer reservation lifecycle
-  expert/               dashboard, credentials, publish wizard
+  expert/               dashboard, credentials, publish wizard, edit form
   auth/                 signup and login for both roles
   market/               market research, investor-facing
   economics/            live unit-economics model
@@ -81,4 +84,4 @@ lib/
 
 ## Not built
 
-This is a demo, not the product. Accounts are real screens over in-memory state — there is no backend, no password is stored, and "Nafath" only flips a verified flag. Also absent by design: a database, a payment gateway, ZATCA invoicing, host payouts, messaging, search ranking, reviews capture, and moderation tooling.
+This is a demo, not the product. Accounts are real screens over in-memory state — there is no backend, no password is stored, and verification only flips a flag. Also absent by design: a database, a payment gateway, ZATCA invoicing, host payouts, messaging, search ranking, reviews capture, and moderation tooling.

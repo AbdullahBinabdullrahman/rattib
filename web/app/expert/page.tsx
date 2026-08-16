@@ -182,6 +182,12 @@ export default function ExpertDashboard() {
                   <div className="flex items-center gap-2">
                     <AudienceBadge policy={e.audiencePolicy} lang={lang} />
                     <ExperienceStatusChip status={e.status} lang={lang} />
+                    <Link
+                      href={`/expert/edit/${e.id}`}
+                      className="btn btn-ghost !py-1 !px-3 !text-xs"
+                    >
+                      {t("edit", lang)}
+                    </Link>
                   </div>
                 </div>
 

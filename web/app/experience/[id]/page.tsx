@@ -162,9 +162,9 @@ export default function ExperienceDetail() {
                     <h3 className="font-bold text-lg">
                       {pick(expert.name, lang)}
                     </h3>
-                    {expert.nafathVerified && (
+                    {expert.identityVerified && (
                       <span className="chip bg-palm-soft text-palm">
-                        ✓ {t("nafathVerified", lang)}
+                        ✓ {t("identityVerified", lang)}
                       </span>
                     )}
                   </div>

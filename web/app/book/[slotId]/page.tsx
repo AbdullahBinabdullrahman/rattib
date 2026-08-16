@@ -192,9 +192,9 @@ export default function BookPage() {
                         ) : (
                           <button
                             onClick={() => setGuest(i, { verified: true })}
-                            className="btn !py-1.5 !px-3 !text-xs bg-nafath text-white"
+                            className="btn !py-1.5 !px-3 !text-xs bg-verify text-white"
                           >
-                            {t("verifyNafath", lang)}
+                            {t("verifyIdentityAction", lang)}
                           </button>
                         ))}
 

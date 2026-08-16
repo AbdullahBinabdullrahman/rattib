@@ -75,6 +75,7 @@ interface DemoState {
 
   addCredential: (type: HostCredential["type"]) => void;
   publishExperience: (exp: Experience) => void;
+  updateExperience: (id: string, patch: Partial<Experience>) => void;
   serviceFeeRate: number;
 }
 
@@ -323,12 +324,21 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const verifyIdentity = useCallback(() => {
-    setSession((s) => (s ? { ...s, nafathVerified: true } : s));
+    setSession((s) => (s ? { ...s, identityVerified: true } : s));
   }, []);
 
   const publishExperience = useCallback((exp: Experience) => {
     setExperiences((prev) => [exp, ...prev]);
   }, []);
+
+  const updateExperience = useCallback(
+    (id: string, patch: Partial<Experience>) => {
+      setExperiences((prev) =>
+        prev.map((e) => (e.id === id ? { ...e, ...patch } : e)),
+      );
+    },
+    [],
+  );
 
   const value = useMemo<DemoState>(
     () => ({
@@ -359,6 +369,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       cancelBooking,
       addCredential,
       publishExperience,
+      updateExperience,
       serviceFeeRate: SERVICE_FEE_RATE,
     }),
     [
@@ -385,6 +396,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       cancelBooking,
       addCredential,
       publishExperience,
+      updateExperience,
     ],
   );
 

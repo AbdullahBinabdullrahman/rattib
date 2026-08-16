@@ -19,7 +19,7 @@ export const EXPERTS: Expert[] = [
     reviewCount: 187,
     sessionsHosted: 240,
     hostingSince: 2023,
-    nafathVerified: true,
+    identityVerified: true,
     responseMinutes: 40,
   },
   {
@@ -37,7 +37,7 @@ export const EXPERTS: Expert[] = [
     reviewCount: 312,
     sessionsHosted: 410,
     hostingSince: 2022,
-    nafathVerified: true,
+    identityVerified: true,
     responseMinutes: 25,
   },
   {
@@ -55,7 +55,7 @@ export const EXPERTS: Expert[] = [
     reviewCount: 96,
     sessionsHosted: 118,
     hostingSince: 2024,
-    nafathVerified: true,
+    identityVerified: true,
     responseMinutes: 90,
   },
   {
@@ -73,7 +73,7 @@ export const EXPERTS: Expert[] = [
     reviewCount: 421,
     sessionsHosted: 530,
     hostingSince: 2022,
-    nafathVerified: true,
+    identityVerified: true,
     responseMinutes: 15,
   },
   {
@@ -91,7 +91,7 @@ export const EXPERTS: Expert[] = [
     reviewCount: 143,
     sessionsHosted: 175,
     hostingSince: 2023,
-    nafathVerified: true,
+    identityVerified: true,
     responseMinutes: 55,
   },
   {
@@ -109,7 +109,7 @@ export const EXPERTS: Expert[] = [
     reviewCount: 208,
     sessionsHosted: 260,
     hostingSince: 2023,
-    nafathVerified: true,
+    identityVerified: true,
     responseMinutes: 35,
   },
   {
@@ -127,7 +127,7 @@ export const EXPERTS: Expert[] = [
     reviewCount: 77,
     sessionsHosted: 95,
     hostingSince: 2024,
-    nafathVerified: true,
+    identityVerified: true,
     responseMinutes: 120,
   },
   {
@@ -145,7 +145,7 @@ export const EXPERTS: Expert[] = [
     reviewCount: 64,
     sessionsHosted: 88,
     hostingSince: 2025,
-    nafathVerified: true,
+    identityVerified: true,
     responseMinutes: 70,
   },
 ];
