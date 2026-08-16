@@ -7,3 +7,6 @@ build/
 npm-debug.log*
 .env*
 next-env.d.ts
+
+# Single-file build output
+web/standalone/out/

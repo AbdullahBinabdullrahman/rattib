@@ -10,6 +10,16 @@ npm run dev      # http://localhost:3000
 
 No database, no API keys, no external services — the whole demo runs from seeded data in the browser, so it works offline and starts instantly.
 
+## Shareable single-file build
+
+```bash
+npm run build:standalone   # → standalone/out/rattib.html
+```
+
+Bundles the entire app — JS and CSS inlined, no external requests — into one HTML file you can host anywhere or send to someone directly. Useful for partner and investor demos, where asking the audience to install Node is not an option.
+
+Because a static file has no server to resolve paths against, routing moves to the URL hash (`#/explore`, `#/experience/x1`). That is the only difference: `standalone/next-shims.tsx` stands in for `next/link` and `next/navigation`, so **no page component changes** and both builds compile from identical source.
+
 ## What to show, in order
 
 1. **Home** — the pitch, and what's bookable in Riyadh today.
