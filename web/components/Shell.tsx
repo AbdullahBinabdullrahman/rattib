@@ -52,6 +52,7 @@ export default function Shell({ children }: { children: ReactNode }) {
               <NavLink href="/expert" label={t("navExpert", lang)} />
             )}
             <NavLink href="/market" label={t("navMarket", lang)} />
+            <NavLink href="/economics" label={t("navEconomics", lang)} />
           </nav>
 
           <div className="ms-auto flex items-center gap-2">
@@ -110,6 +111,7 @@ export default function Shell({ children }: { children: ReactNode }) {
             <NavLink href="/expert" label={t("navExpert", lang)} />
           )}
           <NavLink href="/market" label={t("navMarket", lang)} />
+          <NavLink href="/economics" label={t("navEconomics", lang)} />
         </div>
       </header>
 

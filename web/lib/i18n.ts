@@ -19,6 +19,7 @@ export const DICT = {
   navBookings: { ar: "حجوزاتي", en: "My bookings" },
   navExpert: { ar: "بوابة الخبير", en: "Expert portal" },
   navMarket: { ar: "السوق", en: "Market" },
+  navEconomics: { ar: "الاقتصاديات", en: "Economics" },
   viewAs: { ar: "العرض بصفة", en: "Viewing as" },
   customer: { ar: "عميل", en: "Customer" },
   expert: { ar: "خبير", en: "Expert" },
