@@ -259,6 +259,29 @@ table,
   }
 }
 
+/*
+ * Touch targets. On a coarse pointer every control a finger has to hit gets
+ * at least 44px of height — filter pills and the small text buttons were
+ * landing around 26px, which is fine for a mouse and not for a thumb.
+ * Non-interactive chips (badges, statuses) are deliberately excluded.
+ */
+@media (pointer: coarse), (max-width: 640px) {
+  .btn,
+  button.chip,
+  a.chip,
+  .field,
+  select,
+  input[type="text"],
+  input[type="number"],
+  input[type="password"] {
+    min-height: 44px;
+  }
+  button.chip,
+  a.chip {
+    padding-inline: 0.85rem;
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Motion                                                              */
 /* ------------------------------------------------------------------ */

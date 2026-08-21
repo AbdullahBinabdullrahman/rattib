@@ -52,7 +52,8 @@ export default function ExpertDashboard() {
             {pick(expert.name, lang)} · {pick(expert.district, lang)}
           </p>
         </div>
-        <div className="flex gap-2">
+        {/* Actions drop to their own row on a phone so the heading keeps its width. */}
+        <div className="flex gap-2 basis-full sm:basis-auto">
           <Link href="/expert/credentials" className="btn btn-ghost !text-xs">
             {t("myCredentials", lang)}
           </Link>

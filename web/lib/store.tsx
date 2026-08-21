@@ -31,6 +31,7 @@ import type {
 } from "./types";
 
 const SERVICE_FEE_RATE = 0.12;
+const STORAGE_KEY = "rattib.demo.v1";
 
 interface DemoState {
   lang: Lang;
@@ -146,12 +147,53 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   // Slots are time-relative, so they are built after mount to keep the
   // server and client markup identical. Two inbound requests are seeded
   // against them so the expert portal has something to act on.
+  //
+  // The account and language are restored here too: losing your sign-in on
+  // a refresh is the kind of thing that makes a prototype feel broken, and
+  // reading storage after mount keeps the server and client markup identical.
   useEffect(() => {
     const built = buildSlots(new Date());
     setSlots(built);
     setBookings(seedRequests(built));
+
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as {
+          session?: Session;
+          lang?: Lang;
+          persona?: Persona;
+        };
+        if (parsed.lang === "ar" || parsed.lang === "en") setLang(parsed.lang);
+        if (parsed.persona === "customer" || parsed.persona === "expert") {
+          setPersona(parsed.persona);
+        }
+        if (parsed.session?.role) {
+          setSession(parsed.session);
+          setViewerGender(parsed.session.gender);
+        }
+      }
+    } catch {
+      // Private browsing, blocked storage — the demo still works, just
+      // without remembering anything.
+    }
+
     setMounted(true);
   }, []);
+
+  // Persist after mount only, so a first paint never writes over what was
+  // stored before it was read.
+  useEffect(() => {
+    if (!mounted) return;
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ session, lang, persona }),
+      );
+    } catch {
+      /* ignore */
+    }
+  }, [mounted, session, lang, persona]);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 30_000);
