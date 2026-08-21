@@ -41,7 +41,46 @@ Not a boolean. An experience carries an `audience_policy`:
 
 The same machinery covers `min_age`, `max_age` and `child_policy` — build it once as an eligibility engine, not as a gender special case.
 
-### 2.2 Calendar — Gregorian only ✅ new
+### 2.2 Expert eligibility — CR or freelance certificate ✅ new
+
+**Rule: no expert transacts without an economic identity — a Commercial Registration (CR) or, at minimum, a freelance certificate (وثيقة العمل الحر).**
+
+This is the right floor, and the **freelance certificate should be the default**, not the CR. Reasons:
+
+- It is issued by MHRSD through **freelance.sa**, is **free and effectively instant**, requires **no commercial registration**, and lets the holder operate under their personal name.
+- It covers **160+ approved activities** across eight programmes — and four of them are our host base almost exactly: **handicrafts, productive families, rural development, and specialized services**.
+- It is explicitly a valid basis for **regular e-commerce activity** (the rule is CR *or* freelance certificate), and it unlocks a **dedicated commercial bank account** — which is what we actually need for payouts.
+
+Requiring a CR as the floor would kill the long tail: the home baker currently selling by Instagram DM will not register a company to teach four people on a Thursday. Requiring a freelance certificate costs her twenty minutes and nothing else. **CR stays as an upgrade path** — needed once a host hires staff, takes partners, approaches the VAT threshold, or wants limited liability.
+
+#### But it is necessary, not sufficient
+
+A CR or freelance certificate establishes *who you are as an economic actor*. It does **not** grant the right to practise a **regulated activity**. Those are separate, sector-issued licences, and which one applies depends on the category. So model eligibility as three layers, not one field:
+
+| Layer | What it proves | Examples |
+|---|---|---|
+| **1. Economic identity** — always required | Legal counterparty, can invoice, can be paid | CR **or** freelance certificate |
+| **2. Activity licence** — category-dependent | Right to practise this specific activity | Abde'a Crafts Practitioner licence (Ministry of Culture / Heritage Commission); municipal craft licence (Balady) for premises; municipal food & health permits for culinary; MT tourism licence and individual tourist-guide licence for guiding and excursions |
+| **3. Rattib trust layer** — always | Safety and quality, ours to enforce | Nafath identity, first-session QA, insurance, ratings, incident history |
+
+#### Why this shapes the whole category roadmap
+
+Whether an experience is a *tourism activity* at all is category-dependent, and that distinction is the unlock. The Ministry of Tourism regime bites hardest on **guiding, excursions, transport and accommodation**. A pottery workshop sold to Riyadh residents is much closer to a craft or training service — covered by the Abde'a Crafts Practitioner licence, which explicitly permits citizens to work in and sell handmade craft fields.
+
+That argues for launching with **crafts and culinary** and deferring **guided outdoor and heritage-site tours**, which is exactly the sequencing the market research recommends on risk grounds. The legal and commercial arguments point the same way.
+
+One firm data point: the individual **tourist-guide licence** exists (Saudi national, 18+, medically fit, accredited training and assessment, General vs. Area Guide) — but guides operate **through registered travel and tourism service providers**. For the tourism-regulated categories, the clean structure is therefore Rattib as the registered operator with licensed individuals working under it.
+
+#### Product implications
+
+- `HostCredential` is a first-class entity with type, number, issuing body, issue and expiry dates, verification state, and evidence document.
+- A **category → required-credential matrix** is configuration, not code. It will change as regulation does.
+- **Gate at publish, not at signup.** Let an expert build the listing, then require credentials before it goes live — this keeps onboarding drop-off low while keeping unlicensed supply off the map.
+- **Expiry is an event.** On expiry, the listing auto-pauses after a grace period and the host is warned ahead of time. A verified-once model rots.
+- Show a **verification badge** on the expert profile — the credential is a trust asset for the customer, not just a compliance checkbox.
+- Onboarding should **link hosts straight to freelance.sa** and to the Abde'a platform. Removing that friction is a supply-acquisition tactic, not just a legal step.
+
+### 2.3 Calendar — Gregorian only ✅ new
 
 - **Gregorian throughout** — UI, API, and database. No Hijri calendar, no dual display, no Hijri toggle.
 - Store all timestamps in **UTC**, render in **Asia/Riyadh**.
@@ -54,7 +93,7 @@ The same machinery covers `min_age`, `max_age` and `child_policy` — build it o
 ## 3. Core flows
 
 ### 3.1 Expert publishes
-1. Sign up → **verification**: identity (Nafath), and `host_credentials` — MT tourism licence, Heritage Commission *Ibda'a* artisan licence, freelance certificate, or CR, depending on category. Credentials carry expiry dates and are re-checked.
+1. Sign up → **verification**: Nafath identity, then `host_credentials` per the three-layer model in §2.2 — always a CR or freelance certificate, plus whatever activity licence the category requires. Credentials carry expiry dates and are re-checked.
 2. Create experience: title, category, description, media, **city + precise pin**, duration, seats (min/max), price per seat, tools & materials provided vs. what the guest must bring, prerequisites, accessibility, **audience policy**, cancellation policy.
 3. Set the **SLA**: response window for booking requests, cancellation and refund terms, no-show handling.
 4. Submit → moderation (content, safety, credentials, pricing sanity) → **published, appears on the map**.
@@ -80,7 +119,12 @@ Two shapes, both needed:
 ```
 User            id, nafath_verified, gender(verified|self_declared), locale, phone
 Expert          user_id, bio, languages, rating, payout_account, status
-HostCredential  expert_id, type(mt_licence|ibdaa|freelance|cr), number, issued, expires, verified_at
+HostCredential  expert_id, layer(identity|activity), number, issuing_body, issued_at, expires_at,
+                type(cr | freelance_doc                      -- layer 1, one required
+                    |abdea_craft | municipal_craft | food_health
+                    |mt_tourism | tour_guide),               -- layer 2, category-dependent
+                verification_state(pending|verified|rejected|expired), evidence_doc
+CategoryRule    category, required_credential_types[], notes   -- config, not code
 Experience      expert_id, title, description, category, city, geo_point,
                 duration_min, seats_min, seats_max, price_per_seat, currency,
                 audience_policy, min_age, max_age, tools_provided[], tools_required[],
@@ -97,13 +141,16 @@ Review          booking_id, author(customer|expert), rating, body
 
 `audience_policy` lives on `Experience` and is evaluated against every guest at booking time by a single eligibility service — the same one that checks age.
 
+`CategoryRule` drives publish-time gating: an `Experience` cannot leave `in_review` unless the expert holds every credential its category requires, and it auto-transitions to `paused` when one expires.
+
 ---
 
 ## 5. Open questions
 
-1. **Licensing structure** — do we operate as marketplace-of-record under our own tourism licence, or require each expert to hold one? This is blocking; see market research §6.1 and §9.
-2. **Take rate** — what commission do hosts accept versus selling by DM at 0%?
-3. **Nafath integration scope** — required for all bookings, or only gender-locked ones? Required for all *hosts* regardless.
+1. **Licensing structure** — partially settled by §2.2: every expert holds a CR or freelance certificate, and category-specific activity licences on top. Still open, and still blocking for the tourism-regulated categories: does Rattib hold the MT tourism licence and contract experts under it (marketplace-of-record), or does each expert hold their own? See market research §6.1 and §9.
+2. **Category → credential matrix** — needs confirming with counsel per category. Specifically: is a paid craft or cooking workshop for residents a regulated *tourism* activity, or a craft/training service? The launch scope depends on the answer.
+3. **Take rate** — what commission do hosts accept versus selling by DM at 0%?
+4. **Nafath integration scope** — required for all bookings, or only gender-locked ones? Required for all *hosts* regardless.
 4. **PSP choice** — which licensed provider supports marketplace split payouts with mada + Apple Pay + STC Pay + Tabby.
 5. **Launch city and category cluster** — proposed: Riyadh, crafts + culinary.
 

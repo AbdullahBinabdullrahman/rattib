@@ -1,0 +1,10 @@
+/* CSS entry for the single-file build. Reuses the app's real stylesheet and
+   points Tailwind at the source directories explicitly, since this build runs
+   outside Next.js and cannot rely on its automatic source detection. */
+
+@import "../app/globals.css";
+
+@source "../app";
+@source "../components";
+@source "../lib";
+@source "../standalone";
