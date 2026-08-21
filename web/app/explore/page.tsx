@@ -165,7 +165,7 @@ export default function Explore() {
             step={10}
             value={maxPrice}
             onChange={(e) => setMaxPrice(Number(e.target.value))}
-            className="w-full accent-brass"
+            className="w-full accent-door"
           />
         </div>
 
@@ -282,7 +282,7 @@ function FilterPill({
       className={`chip border transition-colors ${
         active
           ? `${activeClass} border-transparent`
-          : "bg-panel text-muted border-line hover:border-brass hover:text-fg"
+          : "bg-panel text-muted border-line hover:border-door hover:text-fg"
       }`}
     >
       {label}

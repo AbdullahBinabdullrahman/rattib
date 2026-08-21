@@ -1,65 +1,73 @@
 @import "tailwindcss";
+@import "./fonts.css";
 /* Relative rather than a bare specifier, so both the Next build and the
    standalone Tailwind CLI build resolve it identically. */
 @import "../node_modules/leaflet/dist/leaflet.css";
 
 /*
- * "Night majlis" — a lamp-lit room where the craft happens after dark.
+ * Najdi.
  *
- * Committed single visual world: the palette is painted explicitly rather
- * than inherited, so the page holds on any host background.
+ * The palette comes from old Riyadh: limewash over mud brick, bitumen-dark
+ * ink, and the turquoise that Najdi houses paint their doors and shutters.
+ * Neutrals are biased brown so the door turquoise reads cool against them —
+ * complementary, and specific to the subject rather than a default grey.
  *
- * Neutrals carry a cool blue bias so the brass accent reads warm against
- * them; brass is the light source, everything else recedes.
+ * Committed to one visual world: every colour is painted explicitly, so the
+ * page holds on any host background.
  */
 @theme {
-  /* Grounds */
-  --color-base: #0c0e12;
-  --color-base-2: #090b0e;
-  --color-panel: #15181e;
-  --color-panel-2: #1e222a;
-  --color-line: #2a2f39;
-  --color-line-soft: #21252d;
+  /* Walls */
+  --color-base: #efe9dd;
+  --color-base-2: #e5dccb;
+  --color-panel: #fbf8f2;
+  --color-panel-2: #eae2d3;
+  --color-line: #d8cdb9;
+  --color-line-soft: #e4dbc9;
 
-  /* Text */
-  --color-fg: #ede8df;
-  --color-muted: #949ca8;
-  --color-faint: #6b7280;
+  /* Ink */
+  --color-fg: #241e16;
+  --color-muted: #7a6e5e;
+  --color-faint: #9c9080;
 
-  /* Brass — the accent, and the only truly warm light in the room */
-  --color-brass: #d8a94e;
-  --color-brass-bright: #ecc06b;
-  --color-brass-deep: #8a6a26;
-  --color-brass-soft: #33290f;
+  /* Najdi door turquoise — the accent */
+  --color-door: #0e6b66;
+  --color-door-bright: #12857e;
+  --color-door-deep: #093f3c;
+  --color-door-soft: #d9e8e5;
 
-  /* Palm — verified, confirmed, success */
-  --color-palm: #43a886;
-  --color-palm-bright: #5cc7a2;
-  --color-palm-deep: #12352b;
-  --color-palm-soft: #14322a;
+  /* Sadu madder — secondary, and the craft categories */
+  --color-clay: #a4382c;
+  --color-clay-soft: #f3e0dc;
+
+  /* Palm — verified, confirmed */
+  --color-palm: #3f6b39;
+  --color-palm-soft: #e0e9dc;
 
   /* Rose — reserved exclusively for women-only audience locks */
-  --color-rose: #ec6ba0;
-  --color-rose-deep: #8d2f56;
-  --color-rose-soft: #3a1a2b;
+  --color-rose: #9c3268;
+  --color-rose-soft: #f4e0ea;
 
-  /* Clay — craft categories */
-  --color-clay: #de7b45;
-  --color-clay-soft: #33200f;
+  /* Brass — ratings and pending states */
+  --color-brass: #9a7218;
+  --color-brass-soft: #f2e8cf;
 
   /* Danger */
-  --color-danger: #f2736b;
-  --color-danger-soft: #3a1a1a;
-  --color-danger-line: #55292a;
+  --color-danger: #a02c22;
+  --color-danger-soft: #f6e2df;
+  --color-danger-line: #dcc0ba;
 
-  /* Identity verification — provider-neutral */
-  --color-verify: #4b7fd4;
+  /* Identity verification */
+  --color-verify: #2c4c86;
 
-  --font-sans:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    "Noto Sans Arabic", "Segoe UI Arabic", Tahoma, Arial, sans-serif;
+  --font-sans: "Tajawal", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --font-display: "Aref Ruqaa", "Tajawal", Georgia, serif;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Najdi walls are built in straight courses; corners stay tight. */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 7px;
 }
 
 html,
@@ -68,24 +76,33 @@ body {
   color: var(--color-fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
-body {
-  /* A single warm pool of light behind the header, like a lamp in the room. */
-  background-image: radial-gradient(
-    120rem 40rem at 50% -18rem,
-    rgba(216, 169, 78, 0.09),
-    transparent 65%
-  );
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-/* Arabic wants more leading and no negative tracking. */
-html[dir="rtl"] body {
-  line-height: 1.8;
+/*
+ * Arabic headings take the Ruq'ah display face. Latin keeps the working face
+ * at heavy weight — Aref Ruqaa's Latin is a companion, not a text face, and
+ * setting English headings in it would look like a costume.
+ */
+/* Ruq'ah is a display face: gorgeous at hero size, tiring at section size.
+   It is held to h1 and anything explicitly marked .display. */
+html[dir="rtl"] h1,
+html[dir="rtl"] .display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.55;
   letter-spacing: 0;
+}
+
+html[dir="ltr"] h1,
+html[dir="ltr"] h2,
+html[dir="ltr"] h3,
+html[dir="ltr"] .display {
+  font-weight: 700;
+  letter-spacing: -0.022em;
+}
+
+html[dir="rtl"] body {
+  line-height: 1.85;
 }
 
 h1,
@@ -94,58 +111,37 @@ h3 {
   text-wrap: balance;
 }
 
-html[dir="ltr"] h1,
-html[dir="ltr"] h2 {
-  letter-spacing: -0.025em;
-}
-
-/* Figures line up in columns everywhere in this product. */
 table,
 .tnum {
   font-variant-numeric: tabular-nums;
 }
 
 ::selection {
-  background: var(--color-brass);
-  color: #0c0e12;
+  background: var(--color-door);
+  color: #fbf8f2;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-brass);
+  outline: 2px solid var(--color-door);
   outline-offset: 2px;
-  border-radius: 0.5rem;
-}
-
-/* Scrollbars, so they don't punch a bright hole in a dark page. */
-* {
-  scrollbar-color: var(--color-line) transparent;
-  scrollbar-width: thin;
 }
 
 @layer components {
-  /* Panels read as lit from above: hairline border plus a 1px inner highlight. */
+  /* A plastered surface, not a lit panel: flat fill, single hairline. */
   .card {
     background: var(--color-panel);
     border: 1px solid var(--color-line);
-    border-radius: 1rem;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.04),
-      0 1px 2px rgba(0, 0, 0, 0.4);
+    border-radius: var(--radius-md);
   }
 
   .card-hover {
     transition:
-      transform 0.35s var(--ease-out-soft),
-      border-color 0.35s var(--ease-out-soft),
-      box-shadow 0.35s var(--ease-out-soft);
+      border-color 0.25s var(--ease-out-soft),
+      background-color 0.25s var(--ease-out-soft);
   }
   .card-hover:hover {
-    transform: translateY(-3px);
-    border-color: color-mix(in srgb, var(--color-brass) 45%, var(--color-line));
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.07),
-      0 14px 34px -12px rgba(0, 0, 0, 0.85),
-      0 0 0 1px rgba(216, 169, 78, 0.06);
+    border-color: var(--color-door);
+    background: #fffdf9;
   }
 
   .btn {
@@ -153,43 +149,38 @@ table,
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.7rem;
-    font-weight: 650;
-    padding: 0.65rem 1.15rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    padding: 0.62rem 1.15rem;
     cursor: pointer;
     border: 1px solid transparent;
-    font-size: 0.925rem;
-    letter-spacing: -0.005em;
+    font-size: 0.9rem;
     transition:
-      background-color 0.2s var(--ease-out-soft),
-      border-color 0.2s var(--ease-out-soft),
-      color 0.2s var(--ease-out-soft),
-      transform 0.12s var(--ease-out-soft);
-  }
-  .btn:not(:disabled):active {
-    transform: translateY(1px);
+      background-color 0.18s var(--ease-out-soft),
+      border-color 0.18s var(--ease-out-soft),
+      color 0.18s var(--ease-out-soft);
   }
   .btn:disabled {
-    opacity: 0.38;
+    opacity: 0.4;
     cursor: not-allowed;
   }
 
   .btn-primary {
-    background: var(--color-brass);
-    color: #16120a;
+    background: var(--color-door);
+    color: #f4f1e9;
   }
   .btn-primary:not(:disabled):hover {
-    background: var(--color-brass-bright);
+    background: var(--color-door-deep);
   }
 
   .btn-ghost {
-    background: var(--color-panel-2);
+    background: transparent;
     border-color: var(--color-line);
     color: var(--color-fg);
   }
   .btn-ghost:not(:disabled):hover {
-    border-color: var(--color-brass);
-    color: var(--color-brass);
+    border-color: var(--color-door);
+    color: var(--color-door);
   }
 
   .btn-danger {
@@ -205,54 +196,66 @@ table,
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    border-radius: 999px;
-    padding: 0.2rem 0.6rem;
-    font-size: 0.75rem;
-    font-weight: 650;
-    line-height: 1.5;
+    border-radius: var(--radius-sm);
+    padding: 0.18rem 0.5rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    line-height: 1.6;
     white-space: nowrap;
   }
 
   .field {
     width: 100%;
     border: 1px solid var(--color-line);
-    background: var(--color-base-2);
-    border-radius: 0.7rem;
-    padding: 0.65rem 0.85rem;
-    font-size: 0.925rem;
+    background: var(--color-panel);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
     color: var(--color-fg);
-    transition: border-color 0.2s var(--ease-out-soft);
+    font-family: inherit;
+    transition: border-color 0.18s var(--ease-out-soft);
   }
   .field::placeholder {
     color: var(--color-faint);
   }
-  .field:hover {
-    border-color: color-mix(in srgb, var(--color-brass) 35%, var(--color-line));
-  }
   .field:focus {
     outline: none;
-    border-color: var(--color-brass);
-    box-shadow: 0 0 0 3px rgba(216, 169, 78, 0.14);
+    border-color: var(--color-door);
+    box-shadow: 0 0 0 2px var(--color-door-soft);
   }
 
   .label {
     display: block;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: var(--color-muted);
-    margin-bottom: 0.4rem;
-    letter-spacing: 0.09em;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
-
   /* Arabic has no case, so uppercase tracking would only damage it. */
   html[dir="rtl"] .label {
     text-transform: none;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
   }
 
   .hairline {
     border-top: 1px solid var(--color-line-soft);
+  }
+
+  /*
+   * The stepped crenellation that runs along the top of a Najdi wall. Used
+   * as the section rule, so the page's one ornamental device is borrowed
+   * from the architecture the crafts come out of.
+   */
+  .najdi-rule {
+    height: 9px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='9' viewBox='0 0 18 9'><path d='M0 9 L9 0 L18 9 Z' fill='%23d8cdb9'/></svg>");
+    background-repeat: repeat-x;
+    background-position: bottom;
+  }
+  .najdi-rule-door {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='9' viewBox='0 0 18 9'><path d='M0 9 L9 0 L18 9 Z' fill='%230e6b66'/></svg>");
   }
 }
 
@@ -263,7 +266,7 @@ table,
 @keyframes rise-in {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -271,22 +274,10 @@ table,
   }
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes pin-drop {
   0% {
     opacity: 0;
-    transform: translateY(-14px) scale(0.7);
-  }
-  70% {
-    transform: translateY(1px) scale(1.06);
+    transform: translateY(-12px) scale(0.75);
   }
   100% {
     opacity: 1;
@@ -303,54 +294,31 @@ table,
   }
 }
 
-@keyframes pulse-ring {
-  0% {
-    opacity: 0.55;
-    transform: scale(0.85);
-  }
-  70%,
-  100% {
-    opacity: 0;
-    transform: scale(1.9);
-  }
-}
-
-/* Route changes lift into place. */
 .page-enter {
-  animation: rise-in 0.42s var(--ease-out-soft) both;
+  animation: rise-in 0.34s var(--ease-out-soft) both;
 }
 
-/* Scroll reveals: hidden until observed, then staggered by index. */
 .reveal {
   opacity: 0;
 }
 .reveal[data-shown="true"] {
-  animation: rise-in 0.6s var(--ease-out-soft) both;
+  animation: rise-in 0.5s var(--ease-out-soft) both;
   animation-delay: var(--reveal-delay, 0ms);
 }
 
 .pin-in {
-  animation: pin-drop 0.5s var(--ease-out-soft) both;
+  animation: pin-drop 0.4s var(--ease-out-soft) both;
 }
 
 .skeleton {
   background: linear-gradient(
     90deg,
     var(--color-panel-2) 25%,
-    #262b34 50%,
+    #f2ebdd 50%,
     var(--color-panel-2) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
-}
-
-.live-dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  border: 2px solid currentColor;
-  animation: pulse-ring 2s ease-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -367,106 +335,100 @@ table,
 }
 
 /* ------------------------------------------------------------------ */
-/* Leaflet overrides — its default chrome is built for light basemaps  */
+/* Leaflet                                                             */
 /* ------------------------------------------------------------------ */
 
 .leaflet-container {
-  background: #0d1014;
+  background: var(--color-base-2);
   font: inherit;
   outline: none;
 }
 .leaflet-tile-pane {
-  /* OSM tiles are light; damp and cool them so they sit in the dark page. */
-  filter: invert(1) hue-rotate(185deg) brightness(0.85) contrast(0.9)
-    saturate(0.55);
+  /* Damp OSM's colour so the map sits inside the palette. */
+  filter: saturate(0.5) contrast(0.94) sepia(0.16) brightness(1.02);
 }
 .leaflet-bar,
 .leaflet-bar a {
   background: var(--color-panel) !important;
   border-color: var(--color-line) !important;
   color: var(--color-fg) !important;
+  border-radius: var(--radius-sm) !important;
 }
 .leaflet-bar a:hover {
   background: var(--color-panel-2) !important;
-  color: var(--color-brass) !important;
+  color: var(--color-door) !important;
 }
 .leaflet-bar {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--color-line) !important;
 }
 .leaflet-control-attribution {
-  background: rgba(12, 14, 18, 0.78) !important;
+  background: rgba(251, 248, 242, 0.85) !important;
   color: var(--color-faint) !important;
   font-size: 10px !important;
 }
 .leaflet-control-attribution a {
   color: var(--color-muted) !important;
 }
-/* Marker wrappers must not paint over the map. */
 .rattib-pin-icon,
 .rattib-district-icon {
   background: none;
   border: none;
 }
 
-/* Experience pins. Rose is reserved for women-only, brass for everything
-   else — the same two-colour rule the legend states.
-
-   The wrapper is the marker element MapLibre positions; it must stay free of
-   transforms. All visual treatment lives on the button inside it. */
+/*
+ * Pins are the teardrop of a wax seal rather than a balloon. The wrapper is
+ * the element Leaflet positions and must stay free of transforms; all visual
+ * treatment lives on the child.
+ */
 .rattib-pin-wrap {
   cursor: pointer;
   line-height: 0;
 }
 
 .rattib-pin {
-  --pin: var(--color-brass);
+  --pin: var(--color-door);
   display: grid;
   place-items: center;
-  width: 2.35rem;
-  height: 2.35rem;
-  border-radius: 999px 999px 999px 4px;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50% 50% 50% 2px;
   transform: rotate(45deg);
   background: var(--pin);
-  border: 2px solid rgba(12, 14, 18, 0.85);
-  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--color-panel);
+  box-shadow: 0 2px 6px rgba(36, 30, 22, 0.32);
   cursor: pointer;
   padding: 0;
   transition:
-    transform 0.3s var(--ease-out-soft),
-    box-shadow 0.3s var(--ease-out-soft);
+    transform 0.25s var(--ease-out-soft),
+    box-shadow 0.25s var(--ease-out-soft);
 }
-.rattib-pin > span {
+.rattib-pin > * {
   transform: rotate(-45deg);
-  font-size: 1.05rem;
-  line-height: 1;
   pointer-events: none;
+  color: #fbf8f2;
+  display: block;
 }
 .rattib-pin-wrap[data-tone="rose"] .rattib-pin {
   --pin: var(--color-rose);
 }
 .rattib-pin-wrap:hover .rattib-pin {
-  transform: rotate(45deg) scale(1.12);
+  transform: rotate(45deg) scale(1.1);
 }
 .rattib-pin-wrap[data-selected="true"] {
   z-index: 3;
 }
 .rattib-pin-wrap[data-selected="true"] .rattib-pin {
-  transform: rotate(45deg) scale(1.22);
-  box-shadow:
-    0 8px 22px -4px rgba(0, 0, 0, 0.95),
-    0 0 0 4px color-mix(in srgb, var(--pin) 35%, transparent);
+  transform: rotate(45deg) scale(1.2);
+  box-shadow: 0 0 0 4px var(--color-door-soft), 0 3px 8px rgba(36, 30, 22, 0.4);
 }
-/* The drop keyframes translate, so compose them with the rotation. */
 .rattib-pin.pin-in {
   animation-name: pin-drop-rotated;
 }
 @keyframes pin-drop-rotated {
   0% {
     opacity: 0;
-    transform: translateY(-16px) rotate(45deg) scale(0.6);
-  }
-  70% {
-    transform: translateY(1px) rotate(45deg) scale(1.08);
+    transform: translateY(-12px) rotate(45deg) scale(0.65);
   }
   100% {
     opacity: 1;
@@ -477,11 +439,10 @@ table,
 .rattib-district {
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  color: #8b93a0;
+  color: #6d6252;
   white-space: nowrap;
   pointer-events: none;
   text-shadow:
-    0 0 4px #0c0e12,
-    0 0 8px #0c0e12;
+    0 0 3px var(--color-base),
+    0 0 6px var(--color-base);
 }

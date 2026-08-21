@@ -19,7 +19,7 @@ function NavLink({ href, label }: { href: string; label: string }) {
     >
       {label}
       <span
-        className={`absolute inset-x-3 -bottom-px h-px bg-brass transition-transform duration-300 origin-center ${
+        className={`absolute inset-x-3 -bottom-px h-px bg-door transition-transform duration-300 origin-center ${
           active ? "scale-x-100" : "scale-x-0"
         }`}
       />
@@ -38,7 +38,7 @@ function Segmented<T extends string>({
   onChange: (v: T) => void;
   tone?: "brass" | "rose";
 }) {
-  const on = tone === "rose" ? "bg-rose text-white" : "bg-brass text-[#16120a]";
+  const on = tone === "rose" ? "bg-rose text-white" : "bg-door text-panel";
   return (
     <div className="hidden sm:flex items-center rounded-xl border border-line bg-panel p-0.5">
       {options.map((o) => (
@@ -62,8 +62,6 @@ export default function Shell({ children }: { children: ReactNode }) {
     setLang,
     persona,
     setPersona,
-    viewerGender,
-    setViewerGender,
     session,
     signOut,
     verifyIdentity,
@@ -93,7 +91,7 @@ export default function Shell({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-40 bg-base/80 backdrop-blur-xl border-b border-line">
         <div className="mx-auto max-w-6xl px-4 h-16 flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <span className="grid place-items-center w-9 h-9 rounded-xl bg-brass text-[#16120a] font-extrabold text-lg leading-none transition-transform duration-300 group-hover:rotate-6">
+            <span className="grid place-items-center w-9 h-9 rounded-xl bg-door text-panel font-extrabold text-lg leading-none transition-transform duration-300 group-hover:rotate-6">
               ر
             </span>
             <span className="font-extrabold text-lg">{t("brand", lang)}</span>
@@ -106,12 +104,12 @@ export default function Shell({ children }: { children: ReactNode }) {
               <div className="relative">
                 <button
                   onClick={() => setMenu((m) => !m)}
-                  className="flex items-center gap-2 rounded-xl border border-line bg-panel ps-1 pe-2.5 py-1 hover:border-brass transition-colors"
+                  className="flex items-center gap-2 rounded-xl border border-line bg-panel ps-1 pe-2.5 py-1 hover:border-door transition-colors"
                 >
                   <span
                     className={`grid place-items-center w-7 h-7 rounded-lg text-xs font-bold ${
                       session.role === "expert"
-                        ? "bg-brass text-[#16120a]"
+                        ? "bg-door text-panel"
                         : "bg-panel-2 text-fg"
                     }`}
                   >
@@ -177,17 +175,6 @@ export default function Shell({ children }: { children: ReactNode }) {
                     { value: "expert" as const, label: t("expert", lang) },
                   ]}
                 />
-                {persona === "customer" && (
-                  <Segmented
-                    tone="rose"
-                    value={viewerGender}
-                    onChange={setViewerGender}
-                    options={[
-                      { value: "female" as const, label: t("female", lang) },
-                      { value: "male" as const, label: t("male", lang) },
-                    ]}
-                  />
-                )}
                 <Link
                   href="/auth"
                   className="btn btn-primary !py-1.5 !px-3 !text-xs"

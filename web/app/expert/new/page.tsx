@@ -173,7 +173,7 @@ export default function NewExperience() {
                     className={`chip border ${
                       category === c
                         ? "bg-palm text-white border-transparent"
-                        : "bg-panel text-muted border-line hover:border-brass"
+                        : "bg-panel text-muted border-line hover:border-door"
                     }`}
                   >
                     {pick(CATEGORY_LABEL[c], lang)}
@@ -240,7 +240,7 @@ export default function NewExperience() {
                   className={`w-full text-start rounded-xl border p-3 flex items-center gap-3 transition-colors ${
                     audience === a
                       ? "border-palm bg-palm-soft"
-                      : "border-line hover:border-brass"
+                      : "border-line hover:border-door"
                   }`}
                 >
                   <AudienceBadge policy={a} lang={lang} size="md" />

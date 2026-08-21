@@ -46,9 +46,12 @@ interface DemoState {
   signOut: () => void;
   verifyIdentity: () => void;
 
-  /** The signed-in customer's verified gender — drives audience filtering. */
-  viewerGender: Gender;
-  setViewerGender: (g: Gender) => void;
+  /**
+   * The signed-in customer's gender, taken from their account. Null when
+   * signed out — browsing is open to everyone and eligibility is enforced at
+   * booking, so there is no reason to ask a visitor to declare a gender.
+   */
+  viewerGender: Gender | null;
 
   experts: Expert[];
   experiences: Experience[];
@@ -131,7 +134,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>("ar");
   const [persona, setPersona] = useState<Persona>("customer");
   const [session, setSession] = useState<Session | null>(null);
-  const [viewerGender, setViewerGender] = useState<Gender>("female");
+  const [viewerGender, setViewerGender] = useState<Gender | null>(null);
   const [mounted, setMounted] = useState(false);
   const [now, setNow] = useState(() => new Date());
 
@@ -321,6 +324,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(() => {
     setSession(null);
     setPersona("customer");
+    setViewerGender(null);
   }, []);
 
   const verifyIdentity = useCallback(() => {
@@ -352,7 +356,6 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       signOut,
       verifyIdentity,
       viewerGender,
-      setViewerGender,
       experts: EXPERTS,
       experiences,
       slots,

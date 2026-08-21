@@ -210,35 +210,36 @@ export async function geocodeRemote(
 
 /** Draws the city underneath, so the map reads with no tiles at all. */
 export function addBaseLayers(L: typeof Leaflet, map: Leaflet.Map) {
+  // Built-up ground: one step deeper than the page, never a dark blob.
   L.polygon(URBAN_AREA, {
     stroke: false,
-    fillColor: "#171b22",
-    fillOpacity: 0.75,
+    fillColor: "#e3d8c3",
+    fillOpacity: 0.85,
     interactive: false,
   }).addTo(map);
 
   L.polyline(WADI_HANIFAH, {
-    color: "#1b3630",
+    color: "#c3d3bd",
     weight: 20,
-    opacity: 0.6,
+    opacity: 0.85,
     lineCap: "round",
     lineJoin: "round",
     interactive: false,
   }).addTo(map);
 
   L.polyline(WADI_HANIFAH, {
-    color: "#2a5e4e",
+    color: "#8aa886",
     weight: 4,
-    opacity: 0.85,
+    opacity: 0.9,
     lineCap: "round",
     interactive: false,
   }).addTo(map);
 
   ROADS.forEach((road) =>
     L.polyline(road, {
-      color: "#333a46",
+      color: "#c9bca3",
       weight: 2.5,
-      opacity: 0.9,
+      opacity: 1,
       interactive: false,
     }).addTo(map),
   );

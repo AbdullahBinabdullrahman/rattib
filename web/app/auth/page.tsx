@@ -51,7 +51,7 @@ export default function Auth() {
   return (
     <div className="mx-auto max-w-lg px-4 py-12">
       <div className="text-center mb-8">
-        <span className="grid place-items-center w-12 h-12 rounded-2xl bg-brass text-[#16120a] font-extrabold text-2xl mx-auto mb-5">
+        <span className="grid place-items-center w-12 h-12 rounded-2xl bg-door text-panel font-extrabold text-2xl mx-auto mb-5">
           ر
         </span>
         <h1 className="text-3xl font-extrabold">
@@ -75,13 +75,13 @@ export default function Auth() {
               key={r.value}
               onClick={() => setRole(r.value)}
               className={`card card-hover p-4 text-start ${
-                role === r.value ? "!border-brass" : ""
+                role === r.value ? "!border-door" : ""
               }`}
             >
               <span
                 className={`grid place-items-center w-9 h-9 rounded-xl text-lg ${
                   role === r.value
-                    ? "bg-brass text-[#16120a]"
+                    ? "bg-door text-panel"
                     : "bg-panel-2 text-muted"
                 }`}
               >

@@ -142,6 +142,11 @@ export const DICT = {
   seatsLeft: { ar: "مقاعد متبقية", en: "seats left" },
   soldOut: { ar: "مكتمل", en: "Sold out" },
   reserve: { ar: "احجز", en: "Reserve" },
+  signInToReserve: { ar: "سجّل الدخول للحجز", en: "Sign in to reserve" },
+  signInToBook: {
+    ar: "هذه تجربة مقيّدة الحضور. سجّل الدخول ليتم التحقق من الأهلية من حسابك.",
+    en: "This experience has a locked audience. Sign in so eligibility can be checked against your account.",
+  },
   policyTitle: { ar: "الشروط", en: "Terms" },
   slaLine: {
     ar: "يردّ الخبير خلال {h} ساعة، وإلا يُلغى الطلب ويُسترد المبلغ كاملًا.",
@@ -394,18 +399,6 @@ export const CATEGORY_LABEL: Record<CategoryId, Bi> = {
   poetry: { ar: "شعر نبطي", en: "Nabati poetry" },
   khoos: { ar: "خوص", en: "Palm frond" },
   tours: { ar: "جولات سياحية", en: "Guided tours" },
-};
-
-export const CATEGORY_GLYPH: Record<CategoryId, string> = {
-  pottery: "🏺",
-  bakery: "🥖",
-  sadu: "🧶",
-  coffee: "☕",
-  calligraphy: "✒️",
-  perfume: "🪔",
-  poetry: "📜",
-  khoos: "🌴",
-  tours: "🧭",
 };
 
 export const AUDIENCE_LABEL: Record<AudiencePolicy, Bi> = {

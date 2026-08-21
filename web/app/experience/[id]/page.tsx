@@ -34,6 +34,7 @@ export default function ExperienceDetail() {
     mounted,
     viewerGender,
     persona,
+    session,
   } = useDemo();
 
   const [slotId, setSlotId] = useState<string | null>(null);
@@ -257,7 +258,7 @@ export default function ExperienceDetail() {
                             className={`w-full text-start rounded-xl border p-3 transition-colors ${
                               active
                                 ? "border-palm bg-palm-soft"
-                                : "border-line hover:border-brass"
+                                : "border-line hover:border-door"
                             } ${full ? "opacity-45 cursor-not-allowed" : ""}`}
                           >
                             <div className="font-semibold text-sm leading-snug">
@@ -287,13 +288,22 @@ export default function ExperienceDetail() {
                   )}
                 </div>
 
-                <button
-                  disabled={!slotId}
-                  onClick={() => router.push(`/book/${slotId}`)}
-                  className="btn btn-primary w-full mt-4 !py-3"
-                >
-                  {t("reserve", lang)}
-                </button>
+                {isLocked(exp.audiencePolicy) && !session ? (
+                  <Link
+                    href="/auth"
+                    className="btn btn-primary w-full mt-4 !py-3"
+                  >
+                    {t("signInToReserve", lang)}
+                  </Link>
+                ) : (
+                  <button
+                    disabled={!slotId}
+                    onClick={() => router.push(`/book/${slotId}`)}
+                    className="btn btn-primary w-full mt-4 !py-3"
+                  >
+                    {t("reserve", lang)}
+                  </button>
+                )}
 
                 <p className="text-[11px] text-muted mt-3 leading-relaxed">
                   {t("heldNote", lang)}

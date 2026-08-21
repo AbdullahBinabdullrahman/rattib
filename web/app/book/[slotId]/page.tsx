@@ -24,6 +24,7 @@ export default function BookPage() {
     slotById,
     experienceById,
     viewerGender,
+    session,
     createBooking,
     mounted,
     serviceFeeRate,
@@ -41,8 +42,8 @@ export default function BookPage() {
     if (guests.length === 0) {
       setGuests([
         {
-          name: lang === "ar" ? "أنت" : "You",
-          gender: viewerGender,
+          name: session?.name || (lang === "ar" ? "أنت" : "You"),
+          gender: viewerGender ?? "female",
           verified: false,
         },
       ]);
@@ -66,6 +67,22 @@ export default function BookPage() {
   }
 
   const locked = requiresVerifiedIdentity(exp.audiencePolicy);
+
+  // An audience lock is only meaningful against a real account, so a signed
+  // out visitor is asked to sign in rather than self-declaring at checkout.
+  if (locked && !session) {
+    return (
+      <div className="mx-auto max-w-lg px-4 py-20 text-center">
+        <h1 className="text-2xl font-extrabold">{pick(exp.title, lang)}</h1>
+        <p className="text-muted mt-3 leading-relaxed">
+          {t("signInToBook", lang)}
+        </p>
+        <Link href="/auth" className="btn btn-primary mt-6">
+          {t("signIn", lang)}
+        </Link>
+      </div>
+    );
+  }
   const partyCheck = checkParty(exp.audiencePolicy, guests);
   const seatsLeft = slot.seatsTotal - slot.seatsTaken;
   const overCapacity = guests.length > seatsLeft;
@@ -132,7 +149,7 @@ export default function BookPage() {
                 onClick={() =>
                   setGuests((g) => [
                     ...g,
-                    { name: "", gender: viewerGender, verified: false },
+                    { name: "", gender: viewerGender ?? "female", verified: false },
                   ])
                 }
                 disabled={guests.length >= seatsLeft}
@@ -239,7 +256,7 @@ export default function BookPage() {
                   className={`rounded-xl border p-3 text-sm font-semibold transition-colors ${
                     method === m
                       ? "border-palm bg-palm-soft text-palm"
-                      : "border-line hover:border-brass"
+                      : "border-line hover:border-door"
                   }`}
                 >
                   {pick(PAYMENT_LABEL[m], lang)}

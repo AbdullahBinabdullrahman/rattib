@@ -128,11 +128,18 @@ export function checkParty(
   return { ok: true };
 }
 
-/** Would this user even see the experience as bookable? */
+/**
+ * Should this experience appear to this viewer?
+ *
+ * A null gender means nobody is signed in. Browsing then stays open — the
+ * lock is enforced at booking, where identity is actually checked — so a
+ * visitor is never asked to declare a gender just to look around.
+ */
 export function canBrowserBook(
   policy: AudiencePolicy,
-  gender: Gender,
+  gender: Gender | null,
 ): boolean {
+  if (gender === null) return true;
   if (policy === "women_only") return gender === "female";
   if (policy === "men_only") return gender === "male";
   return true;

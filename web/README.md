@@ -23,7 +23,7 @@ Because a static file has no server to resolve paths against, routing moves to t
 ## What to show, in order
 
 1. **Home** — the pitch, and what's bookable in Riyadh today.
-2. **Explore** — map-first discovery on a real Leaflet map: pan, zoom, click a pin. Pins are colour-coded by audience policy — rose is women-only, brass is everything else. Filter by category, audience, price, and "today only". **Streets** toggles OpenStreetMap tiles on; without them the map still draws Riyadh's built-up area, Wadi Hanifah, the main arteries and district labels from local geometry.
+2. **Explore** — map-first discovery on a real Leaflet map: pan, zoom, click a pin, or **My location** to centre on yourself. Pins are colour-coded by audience policy — rose is women-only, turquoise is everything else. Filter by category, audience, price, and "today only". OpenStreetMap tiles load by default; where they cannot be reached the map falls back to Riyadh's built-up area, Wadi Hanifah, the main arteries and district labels drawn from local geometry.
 3. **Experience detail** — description, what's included, host profile with the licences they hold, terms, and the slot picker.
 4. **Booking** — pick a women-only session and try to book it. Every guest must have a verified identity and must match the policy; payment stays disabled until the whole party passes. Switch the header toggle to **Male** and the same experience disappears from Explore entirely.
 5. **My bookings** — the reservation lifecycle: pending with a live SLA countdown, then accepted with a check-in code, or rejected/expired with a full refund.
@@ -38,14 +38,21 @@ Because a static file has no server to resolve paths against, routing moves to t
 
 **Sign in** (header) opens signup and login for both roles. Role is chosen at signup because it decides which portal you land in. Accounts start unverified; identity verification is a separate step from the account menu, and it is only needed to book an audience-locked experience.
 
+**Gender is never a public control.** It is collected once at signup, used only for eligibility, and never shown to other guests. Signed out, browsing is open — every experience is visible — and the lock is enforced at booking, where an audience-locked session asks you to sign in rather than to declare anything at checkout.
+
 Identity verification is deliberately **provider-neutral** — the app calls a generic verify step rather than naming a provider, so a national identity service can be attached behind it later without touching the eligibility engine.
 
-Signed out, the demo stays fully usable and the header shows two switches instead:
-
-- **Customer / Expert** — which side of the marketplace you're on.
-- **Female / Male** — the viewer's verified gender, which drives audience filtering.
+Signed out, the demo stays fully usable and the header shows a **Customer / Expert** switch so you can see both sides without an account.
 
 **EN / عربي** toggles the full bilingual UI with RTL. Arabic is the default.
+
+## Design
+
+**Najdi.** The palette is taken from old Riyadh — limewash over mud brick, bitumen-dark ink, and the turquoise that Najdi houses paint their doors. Neutrals are biased brown so the accent reads cool against them. The one ornamental device is the stepped crenellation from the top of a Najdi wall, used as a rule.
+
+**Type.** **Aref Ruqaa** — a Ruq'ah-derived Arabic display face — sets the wordmark and page headings; **Tajawal** does the UI and body work in both scripts. Both are embedded as base64 rather than linked, so the shared build carries its own typography and never falls back silently. Ruq'ah is held to h1: it is a display face, and it tires at section size.
+
+**Drawn, not emoji.** Each craft has a line mark of the actual object — a dallah for coffee, a qalam for calligraphy, a woven band for sadu. Emoji render differently on every platform and cannot take the palette.
 
 ## Deliberate decisions
 

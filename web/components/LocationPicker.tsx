@@ -53,7 +53,7 @@ export default function LocationPicker({
   const map = useRef<Leaflet.Map | null>(null);
   const marker = useRef<Leaflet.Marker | null>(null);
   const tiles = useRef<Leaflet.TileLayer | null>(null);
-  const [streets, setStreets] = useState(false);
+  const [streets, setStreets] = useState(true);
   const [ready, setReady] = useState(false);
 
   // Latest value without re-creating the map on every keystroke.
@@ -177,6 +177,21 @@ export default function LocationPicker({
     };
   }, [ready, streets]);
 
+  /** Drop the pin on the host's own position, if they allow it. */
+  const useMyLocation = () => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) =>
+        onChangeRef.current({
+          ...valueRef.current,
+          lat: Number(pos.coords.latitude.toFixed(5)),
+          lon: Number(pos.coords.longitude.toFixed(5)),
+        }),
+      () => {},
+      { enableHighAccuracy: true, timeout: 8000 },
+    );
+  };
+
   const choose = (p: Place) => {
     onChange({
       lat: p.lat,
@@ -206,7 +221,7 @@ export default function LocationPicker({
             onClick={() => setMode(m)}
             className={`px-3.5 py-1.5 text-xs font-semibold transition-colors ${
               mode === m
-                ? "bg-brass text-[#16120a]"
+                ? "bg-door text-panel"
                 : "bg-panel text-muted hover:text-fg"
             }`}
           >
@@ -292,11 +307,18 @@ export default function LocationPicker({
           onClick={() => setStreets((v) => !v)}
           className={`absolute top-2 start-2 z-[500] chip border transition-colors ${
             streets
-              ? "bg-brass text-[#16120a] border-transparent"
+              ? "bg-door text-panel border-transparent"
               : "bg-panel text-muted border-line hover:text-fg"
           }`}
         >
           {lang === "ar" ? "شوارع" : "Streets"}
+        </button>
+        <button
+          type="button"
+          onClick={useMyLocation}
+          className="absolute top-2 end-2 z-[500] chip border bg-panel text-muted border-line hover:text-fg transition-colors"
+        >
+          {lang === "ar" ? "موقعي" : "My location"}
         </button>
         {mode === "map" && (
           <span className="absolute bottom-2 start-2 z-[500] chip bg-panel text-muted border border-line">

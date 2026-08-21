@@ -154,7 +154,7 @@ export default function EditExperience() {
                 onClick={() => set({ category: c })}
                 className={`chip border transition-colors ${
                   exp.category === c
-                    ? "bg-brass text-[#16120a] border-transparent"
+                    ? "bg-door text-panel border-transparent"
                     : "bg-panel text-muted border-line hover:text-fg"
                 }`}
               >
@@ -243,7 +243,7 @@ export default function EditExperience() {
                 onClick={() => set({ bookingMode: m })}
                 className={`px-4 py-2 text-sm font-semibold transition-colors ${
                   exp.bookingMode === m
-                    ? "bg-brass text-[#16120a]"
+                    ? "bg-door text-panel"
                     : "bg-panel text-muted hover:text-fg"
                 }`}
               >
@@ -263,8 +263,8 @@ export default function EditExperience() {
               onClick={() => set({ audiencePolicy: a })}
               className={`w-full text-start rounded-xl border p-3 flex items-center gap-3 transition-colors ${
                 exp.audiencePolicy === a
-                  ? "border-brass bg-panel-2"
-                  : "border-line hover:border-brass"
+                  ? "border-door bg-panel-2"
+                  : "border-line hover:border-door"
               }`}
             >
               <AudienceBadge policy={a} lang={lang} size="md" />

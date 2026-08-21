@@ -84,7 +84,7 @@ export default function Bookings() {
 
                     {/* Pending — the SLA clock the customer can watch */}
                     {b.status === "pending" && (
-                      <div className="mt-3 rounded-xl bg-brass-soft text-brass p-3 text-sm font-semibold flex items-center justify-between gap-2 flex-wrap">
+                      <div className="mt-3 rounded-xl bg-door-soft text-brass p-3 text-sm font-semibold flex items-center justify-between gap-2 flex-wrap">
                         <span>{t("respondBy", lang)}</span>
                         <span dir="ltr">{countdown(b.respondBy, lang, now)}</span>
                       </div>

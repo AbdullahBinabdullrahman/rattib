@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useDemo } from "@/lib/store";
-import { CATEGORY_GLYPH, CATEGORY_LABEL, pick, t } from "@/lib/i18n";
+import { CATEGORY_LABEL, pick, t } from "@/lib/i18n";
+import CategoryIcon from "@/components/CategoryIcon";
 import ExperienceCard from "@/components/ExperienceCard";
 import { Reveal } from "@/components/motion";
 import { isToday } from "@/lib/format";
@@ -46,11 +47,7 @@ export default function Home() {
       <section className="relative overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 pt-20 pb-16 md:pt-28 md:pb-20">
           <Reveal>
-            <span className="chip bg-brass-soft text-brass relative">
-              <span className="relative flex w-1.5 h-1.5">
-                <span className="live-dot absolute inset-0 rounded-full" />
-                <span className="w-1.5 h-1.5 rounded-full bg-brass" />
-              </span>
+            <span className="chip bg-door-soft text-door">
               {t("todayIn", lang)}
             </span>
           </Reveal>
@@ -59,7 +56,7 @@ export default function Home() {
             <h1 className="mt-6 text-[clamp(2.5rem,7vw,5rem)] font-extrabold leading-[1.05] max-w-3xl">
               {t("heroTitle", lang)}
               <br />
-              <span className="text-brass">{t("heroTitle2", lang)}</span>
+              <span className="text-door">{t("heroTitle2", lang)}</span>
             </h1>
           </Reveal>
 
@@ -89,11 +86,9 @@ export default function Home() {
                 <Link
                   key={c}
                   href="/explore"
-                  className="shrink-0 flex items-center gap-2 rounded-xl border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-muted hover:text-fg hover:border-brass transition-colors"
+                  className="shrink-0 flex items-center gap-2 rounded-[3px] border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-muted hover:text-fg hover:border-door transition-colors"
                 >
-                  <span aria-hidden className="text-base">
-                    {CATEGORY_GLYPH[c]}
-                  </span>
+                  <CategoryIcon category={c} size={17} />
                   {pick(CATEGORY_LABEL[c], lang)}
                 </Link>
               ))}
@@ -110,7 +105,7 @@ export default function Home() {
               <h2 className="text-xl font-extrabold">{t("todayIn", lang)}</h2>
               <Link
                 href="/explore"
-                className="text-sm font-semibold text-brass hover:underline"
+                className="text-sm font-semibold text-door hover:underline"
               >
                 {t("ctaExplore", lang)} →
               </Link>
@@ -139,12 +134,12 @@ export default function Home() {
           {[
             { icon: "✓", t: "why1t", b: "why1b", tone: "bg-palm-soft text-palm" },
             { icon: "♀", t: "why2t", b: "why2b", tone: "bg-rose-soft text-rose" },
-            { icon: "⛨", t: "why3t", b: "why3b", tone: "bg-brass-soft text-brass" },
+            { icon: "⛨", t: "why3t", b: "why3b", tone: "bg-door-soft text-door" },
           ].map((c, i) => (
             <Reveal key={c.t} index={i}>
               <div className="card card-hover p-6 h-full">
                 <span
-                  className={`grid place-items-center w-10 h-10 rounded-xl text-lg font-bold ${c.tone}`}
+                  className={`grid place-items-center w-10 h-10 rounded-[3px] text-lg font-bold ${c.tone}`}
                 >
                   {c.icon}
                 </span>

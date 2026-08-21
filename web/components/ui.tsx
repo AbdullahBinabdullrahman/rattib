@@ -1,7 +1,8 @@
 "use client";
 
 import type { AudiencePolicy, Bi, BookingStatus, CategoryId, ExperienceStatus, Lang } from "@/lib/types";
-import { AUDIENCE_LABEL, CATEGORY_GLYPH, CATEGORY_LABEL, pick, t } from "@/lib/i18n";
+import { AUDIENCE_LABEL, CATEGORY_LABEL, pick, t } from "@/lib/i18n";
+import CategoryIcon from "./CategoryIcon";
 
 /* ---------------------------------------------------------------- */
 /* Audience policy badge — the product's signature primitive         */
@@ -10,7 +11,7 @@ import { AUDIENCE_LABEL, CATEGORY_GLYPH, CATEGORY_LABEL, pick, t } from "@/lib/i
 const AUDIENCE_STYLE: Record<AudiencePolicy, string> = {
   women_only: "bg-rose-soft text-rose",
   men_only: "bg-palm-soft text-palm",
-  families_only: "bg-brass-soft text-brass",
+  families_only: "bg-door-soft text-brass",
   mixed: "bg-panel-2 text-muted",
   private_buyout: "bg-clay-soft text-clay",
 };
@@ -45,66 +46,53 @@ export function AudienceBadge({
 }
 
 /* ---------------------------------------------------------------- */
-/* Category artwork — self-contained, no external images             */
+/* Category plates                                                   */
 /* ---------------------------------------------------------------- */
 
-const CATEGORY_GRADIENT: Record<CategoryId, [string, string]> = {
-  pottery: ["#C2703F", "#8A4526"],
-  bakery: ["#D69B3C", "#A05F1E"],
-  sadu: ["#A83B4B", "#6E1F2E"],
-  coffee: ["#8C5A38", "#4E2E1B"],
-  calligraphy: ["#3C4E7A", "#1E2748"],
-  perfume: ["#7A4A86", "#43244C"],
-  poetry: ["#2C6E63", "#14403A"],
-  khoos: ["#5E8C42", "#31541F"],
-  tours: ["#3E7EA0", "#1F4A63"],
+/**
+ * Flat earth tints rather than gradients: each craft gets a colour taken
+ * from its own material — fired clay, proofed dough, madder-dyed wool.
+ */
+const CATEGORY_TINT: Record<CategoryId, [string, string]> = {
+  pottery: ["#c9a48c", "#5f3419"],
+  bakery: ["#d8c199", "#664c14"],
+  sadu: ["#c79a99", "#71241f"],
+  coffee: ["#bda88e", "#4f3219"],
+  calligraphy: ["#a8b2c1", "#28374b"],
+  perfume: ["#bda9c0", "#43294b"],
+  poetry: ["#a4bdb4", "#1e4842"],
+  khoos: ["#b5c29a", "#354920"],
+  tours: ["#a8bcc7", "#22414d"],
 };
-
-/** A repeating eight-point star, drawn inline so nothing is fetched. */
-function StarPattern({ id }: { id: string }) {
-  return (
-    <defs>
-      <pattern id={id} width="44" height="44" patternUnits="userSpaceOnUse">
-        <g fill="none" stroke="#fff" strokeOpacity="0.16" strokeWidth="1">
-          <path d="M22 4 L28 16 L40 22 L28 28 L22 40 L16 28 L4 22 L16 16 Z" />
-          <rect x="4" y="4" width="36" height="36" transform="rotate(45 22 22)" />
-        </g>
-      </pattern>
-    </defs>
-  );
-}
 
 export function CategoryArt({
   category,
   className = "",
-  glyphSize = "text-5xl",
+  glyphSize,
 }: {
   category: CategoryId;
   className?: string;
+  /** Retained for call-site compatibility; icon size is derived instead. */
   glyphSize?: string;
 }) {
-  const [from, to] = CATEGORY_GRADIENT[category];
-  const patternId = `stars-${category}`;
+  const [bg, ink] = CATEGORY_TINT[category];
+  const big = glyphSize?.includes("7xl") || glyphSize?.includes("5xl");
   return (
-    <div className={`relative overflow-hidden ${className}`}>
-      <svg
-        className="absolute inset-0 w-full h-full"
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden
-      >
-        <StarPattern id={patternId} />
-        <rect width="100%" height="100%" fill={`url(#grad-${category})`} />
-        <defs>
-          <linearGradient id={`grad-${category}`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor={from} />
-            <stop offset="100%" stopColor={to} />
-          </linearGradient>
-        </defs>
-        <rect width="100%" height="100%" fill={`url(#${patternId})`} />
-      </svg>
-      <div className={`relative grid place-items-center h-full ${glyphSize}`}>
-        <span aria-hidden>{CATEGORY_GLYPH[category]}</span>
-      </div>
+    <div
+      className={`relative grid place-items-center ${className}`}
+      style={{ background: bg, color: ink }}
+    >
+      <CategoryIcon category={category} size={big ? 64 : 34} />
+      {/* Najdi crenellation along the base, tinted to the plate */}
+      <span
+        className="absolute inset-x-0 bottom-0 h-[7px] opacity-40"
+        style={{
+          backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='7' viewBox='0 0 14 7'><path d='M0 7 L7 0 L14 7 Z' fill='${encodeURIComponent(
+            ink,
+          )}'/></svg>")`,
+          backgroundRepeat: "repeat-x",
+        }}
+      />
     </div>
   );
 }
@@ -118,7 +106,7 @@ export function CategoryChip({
 }) {
   return (
     <span className="chip bg-panel-2 text-muted">
-      <span aria-hidden>{CATEGORY_GLYPH[category]}</span>
+      <CategoryIcon category={category} size={14} />
       {pick(CATEGORY_LABEL[category], lang)}
     </span>
   );
@@ -143,7 +131,7 @@ export function Stars({ rating, count }: { rating: number; count?: number }) {
 }
 
 const BOOKING_STYLE: Record<BookingStatus, string> = {
-  pending: "bg-brass-soft text-brass",
+  pending: "bg-door-soft text-brass",
   accepted: "bg-palm-soft text-palm",
   rejected: "bg-danger-soft text-danger",
   expired: "bg-panel-2 text-muted",
@@ -178,7 +166,7 @@ const EXP_STYLE: Record<ExperienceStatus, string> = {
   published: "bg-palm-soft text-palm",
   draft: "bg-panel-2 text-muted",
   blocked: "bg-danger-soft text-danger",
-  in_review: "bg-brass-soft text-brass",
+  in_review: "bg-door-soft text-brass",
   paused: "bg-panel-2 text-muted",
 };
 
@@ -216,7 +204,7 @@ export function Avatar({
   const bg = { palm: "bg-palm", clay: "bg-clay", rose: "bg-rose" }[tone];
   return (
     <span
-      className={`grid place-items-center rounded-full text-white font-bold shrink-0 ${bg}`}
+      className={`grid place-items-center rounded-[3px] text-panel font-bold shrink-0 ${bg}`}
       style={{ width: size, height: size, fontSize: size * 0.36 }}
       dir="ltr"
     >

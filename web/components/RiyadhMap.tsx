@@ -3,7 +3,8 @@
 import type * as Leaflet from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import type { Experience, Lang } from "@/lib/types";
-import { CATEGORY_GLYPH, pick } from "@/lib/i18n";
+import { pick } from "@/lib/i18n";
+import { categoryIconSvg } from "./CategoryIcon";
 import {
   DISTRICTS,
   RIYADH_CENTER,
@@ -34,9 +35,10 @@ import {
  */
 function pinHtml(exp: Experience) {
   const tone = exp.audiencePolicy === "women_only" ? "rose" : "brass";
-  return `<span class="rattib-pin-wrap" data-tone="${tone}" data-selected="false"><span class="rattib-pin pin-in"><span aria-hidden="true">${
-    CATEGORY_GLYPH[exp.category]
-  }</span></span></span>`;
+  return `<span class="rattib-pin-wrap" data-tone="${tone}" data-selected="false"><span class="rattib-pin pin-in">${categoryIconSvg(
+    exp.category,
+    17,
+  )}</span></span>`;
 }
 
 export default function RiyadhMap({
@@ -59,11 +61,29 @@ export default function RiyadhMap({
   const districts = useRef<Leaflet.Marker[]>([]);
   const [ready, setReady] = useState(false);
   const tileLayer = useRef<Leaflet.TileLayer | null>(null);
-  const [streets, setStreets] = useState(false);
+  const [streets, setStreets] = useState(true);
   const [tilesFailed, setTilesFailed] = useState(false);
 
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+
+  const [locating, setLocating] = useState(false);
+
+  /** Centre on the viewer if they allow it; Riyadh remains the default. */
+  const locateMe = () => {
+    if (!navigator.geolocation || !map.current) return;
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLocating(false);
+        map.current?.flyTo([pos.coords.latitude, pos.coords.longitude], 13, {
+          duration: 0.8,
+        });
+      },
+      () => setLocating(false),
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300_000 },
+    );
+  };
 
   /* Create the map once. Leaflet touches `window` at module scope, so it is
      imported here rather than at the top of the file — that keeps the page
@@ -111,9 +131,9 @@ export default function RiyadhMap({
     };
   }, []);
 
-  /* Street tiles are opt-in: the shared single-file build runs under a
-     content policy that blocks external hosts, so the map must be useful
-     without ever reaching for the network. */
+  /* Real streets are the default. Where they cannot be reached — the shared
+     single-file build runs under a content policy that blocks external hosts
+     — the layer removes itself and the inline geometry carries the map. */
   useEffect(() => {
     const L = leaflet.current;
     const m = map.current;
@@ -223,20 +243,35 @@ export default function RiyadhMap({
           {lang === "ar" ? "للنساء فقط" : "Women only"}
         </span>
         <span className="flex items-center gap-2 text-[11px] font-semibold">
-          <i className="w-2.5 h-2.5 rounded-full bg-brass inline-block" />
+          <i className="w-2.5 h-2.5 rounded-full bg-door inline-block" />
           {lang === "ar" ? "بقية التجارب" : "All other experiences"}
         </span>
       </div>
 
       <div className="absolute top-3 start-3 z-[500] flex items-center gap-2">
         <button
+          type="button"
+          onClick={locateMe}
+          disabled={locating}
+          className="chip border bg-panel text-muted border-line hover:text-fg transition-colors"
+        >
+          {locating
+            ? lang === "ar"
+              ? "جارٍ التحديد…"
+              : "Locating…"
+            : lang === "ar"
+              ? "موقعي"
+              : "My location"}
+        </button>
+        <button
+          type="button"
           onClick={() => {
             setTilesFailed(false);
             setStreets((v) => !v);
           }}
           className={`chip border transition-colors ${
             streets
-              ? "bg-brass text-[#16120a] border-transparent"
+              ? "bg-door text-panel border-transparent"
               : "bg-panel text-muted border-line hover:text-fg"
           }`}
         >
