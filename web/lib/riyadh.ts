@@ -11,7 +11,29 @@ import type { Bi, Lang } from "./types";
  */
 
 export const RIYADH_CENTER: [number, number] = [24.715, 46.685];
-export const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+/**
+ * Basemap tiles.
+ *
+ * Mapbox when a token is configured (NEXT_PUBLIC_MAPBOX_TOKEN, kept in
+ * .env.local and never committed), OpenStreetMap otherwise. Neither is
+ * reachable from a published artifact — that sandbox blocks every external
+ * host — so the inline geometry below always renders underneath and the map
+ * stays legible with no network at all.
+ */
+export const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
+
+export const TILE_URL = MAPBOX_TOKEN
+  ? `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/512/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`
+  : "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+export const TILE_ATTRIBUTION = MAPBOX_TOKEN
+  ? "&copy; Mapbox &copy; OpenStreetMap"
+  : "&copy; OpenStreetMap contributors";
+
+/** Mapbox serves 512px tiles, which Leaflet must be told about. */
+export const TILE_SIZE = MAPBOX_TOKEN ? 512 : 256;
+export const TILE_ZOOM_OFFSET = MAPBOX_TOKEN ? -1 : 0;
 
 /** Rough bounds of the built-up city, used to keep pins plausible. */
 export const RIYADH_BOUNDS = {

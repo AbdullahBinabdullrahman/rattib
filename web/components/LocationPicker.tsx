@@ -5,7 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { t } from "@/lib/i18n";
 import type { Bi, Lang } from "@/lib/types";
 import {
+  TILE_ATTRIBUTION,
+  TILE_SIZE,
   TILE_URL,
+  TILE_ZOOM_OFFSET,
   addBaseLayers,
   geocodeRemote,
   inRiyadh,
@@ -98,7 +101,7 @@ export default function LocationPicker({
         center: [valueRef.current.lat, valueRef.current.lon],
         zoom: 12,
         minZoom: 9,
-        maxZoom: 17,
+        maxZoom: 18,
         attributionControl: true,
       });
       addBaseLayers(L, m);
@@ -165,9 +168,10 @@ export default function LocationPicker({
       return;
     }
     const layer = L.tileLayer(TILE_URL, {
-      maxZoom: 17,
-      opacity: 0.55,
-      attribution: "&copy; OpenStreetMap contributors",
+      maxZoom: 18,
+      tileSize: TILE_SIZE,
+      zoomOffset: TILE_ZOOM_OFFSET,
+      attribution: TILE_ATTRIBUTION,
     });
     layer.on("tileerror", () => setStreets(false));
     layer.addTo(m);

@@ -8,7 +8,10 @@ import { categoryIconSvg } from "./CategoryIcon";
 import {
   DISTRICTS,
   RIYADH_CENTER,
+  TILE_ATTRIBUTION,
+  TILE_SIZE,
   TILE_URL,
+  TILE_ZOOM_OFFSET,
   addBaseLayers,
 } from "@/lib/riyadh";
 
@@ -102,7 +105,7 @@ export default function RiyadhMap({
         center: RIYADH_CENTER,
         zoom: 11,
         minZoom: 9,
-        maxZoom: 16,
+        maxZoom: 18,
         zoomControl: true,
         attributionControl: true,
         // Keyboard panning would fight the page's own scroll handling.
@@ -146,10 +149,11 @@ export default function RiyadhMap({
     }
 
     const layer = L.tileLayer(TILE_URL, {
-      maxZoom: 16,
-      opacity: 0.55,
+      maxZoom: 18,
+      tileSize: TILE_SIZE,
+      zoomOffset: TILE_ZOOM_OFFSET,
       className: "rattib-tiles",
-      attribution: "&copy; OpenStreetMap contributors",
+      attribution: TILE_ATTRIBUTION,
     });
     layer.on("tileerror", () => {
       setTilesFailed(true);
@@ -214,6 +218,20 @@ export default function RiyadhMap({
       markers.current.set(exp.id, mk);
     });
   }, [ready, experiences, lang]);
+
+  /* Open on the whole set rather than a fixed window, so nothing sits off
+     screen. Runs once — later filtering should not yank the view around. */
+  const fitted = useRef(false);
+  useEffect(() => {
+    const L = leaflet.current;
+    if (!ready || !L || !map.current || fitted.current) return;
+    if (experiences.length === 0) return;
+    fitted.current = true;
+    map.current.fitBounds(
+      L.latLngBounds(experiences.map((e) => [e.lat, e.lon] as [number, number])),
+      { padding: [56, 56], maxZoom: 13, animate: false },
+    );
+  }, [ready, experiences]);
 
   /* Selection: highlight the pin and ease the map toward it. */
   useEffect(() => {

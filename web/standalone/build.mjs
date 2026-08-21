@@ -35,7 +35,13 @@ const js = await esbuild.build({
   jsx: "automatic",
   tsconfig: path.join(root, "tsconfig.json"),
   alias: { "next/link": shims, "next/navigation": shims },
-  define: { "process.env.NODE_ENV": '"production"' },
+  define: {
+    "process.env.NODE_ENV": '"production"',
+    // Deliberately blank: a published artifact blocks every external host, so
+    // the map falls back to inline geometry and the token stays out of a file
+    // that gets shared around.
+    "process.env.NEXT_PUBLIC_MAPBOX_TOKEN": '""',
+  },
   write: false,
   legalComments: "none",
 });
